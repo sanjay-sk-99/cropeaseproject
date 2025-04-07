@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart - CropEase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <nav class="bg-green-600 p-4 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-white text-2xl font-bold">
+          <a href="/cropeaseproject/index.html">CropEase</a>
+        </h1>
+        <h1 class="text-white text-2xl font-bold">Cart</h1>
+      </div>
+    </nav>
+
+    <div class="container mx-auto my-10 bg-white p-6 rounded shadow-md">
+      <h2 class="text-2xl font-semibold mb-4">Your Order Summary</h2>
+      <div id="orderDetails" class="space-y-4">
+        <!-- Filled by JavaScript -->
+      </div>
+      <div class="text-right mt-4">
+        <h3 class="text-xl font-bold">
+          Total Price: ₹<span id="totalPrice">0</span>
+        </h3>
+      </div>
+      <div class="text-right mt-6">
+        <a
+          href="checkout.html"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
+          >Proceed to Checkout</a
+        >
+      </div>
+    </div>
+
+    <footer
+      class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between fixed bottom-0 inline-block w-full"
+    >
+      <h4>&copy; 2025 Crop Care . All right reserved</h4>
+      <h4>
+        Made with<i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+        chennai, India
+      </h4>
+    </footer>
+
+    <script>
+      //for total hours
+      function calculateTotalHours(startTime, endTime) {
+        const [sh, sm] = startTime.split(':').map(Number)
+        const [eh, em] = endTime.split(':').map(Number)
+        const start = sh * 60 + sm
+        const end = eh * 60 + em
+        return Math.max(1, Math.ceil((end - start) / 60))
+      }
+
+      //getting details from localstorage
+      const orderData = JSON.parse(localStorage.getItem('cartData')) || {}
+
+      const orderDetails = document.getElementById('orderDetails')
+      const totalPriceEl = document.getElementById('totalPrice')
+
+      //showing order details
+      if (orderData.name) {
+        const totalHours = calculateTotalHours(
+          orderData.startTime,
+          orderData.endTime
+        )
+        const totalPrice = totalHours * orderData.quantity * 5000
+        totalPriceEl.textContent = totalPrice
+
+        orderDetails.innerHTML = `
+          <div><strong>Name:</strong> ${orderData.name}</div>
+          <div><strong>Phone:</strong> ${orderData.phone}</div>
+          <div><strong>Address:</strong> ${orderData.address}</div>
+          <div><strong>Machine:</strong> Rice Harvester</div>
+          <div><strong>Date:</strong> ${orderData.date}</div>
+          <div><strong>Time:</strong> ${orderData.startTime} to ${orderData.endTime}</div>
+          <div><strong>Quantity:</strong> ${orderData.quantity}</div>
+          <div><strong>Rate per Hour:</strong> ₹5000</div>
+          <div><strong>Total Hours:</strong> ${totalHours}</div>
+        `
+      } else {
+        orderDetails.innerHTML = `<p>No order data found.</p>`
+      }
+    </script>
+  </body>
+</html>
