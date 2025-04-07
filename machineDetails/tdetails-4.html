@@ -29,10 +29,10 @@
         <div class="w-[25rem] h-[22rem]">
           <img
             src="/cropeaseproject/assets/t-4.webp"
-            alt="harvest machine"
+            alt="Tractor"
             class="w-full h-full object-cover-center"
           />
-          <h3 class="font-semibold text-2xl text-green-600">50hp Jhon deere Tractor</h3>
+          <h3 class="font-semibold text-2xl text-green-600">50hp Jhon Deere Tractor</h3>
         </div>
         <div>
           <h2 class="text-2xl font-bold mb-4">Order Details</h2>
@@ -40,7 +40,7 @@
           <!-- Date Selection -->
           <div class="mb-4">
             <label class="block font-semibold">Select Date:</label>
-            <input type="date" class="w-full p-2 border rounded" />
+            <input type="date" id="date" class="w-full p-2 border rounded" />
           </div>
 
           <!-- Time Selection -->
@@ -50,6 +50,7 @@
               <input
                 type="time"
                 min="06:00"
+                id="time"
                 class="p-2 border rounded w-full"
               />
               <span class="p-2">to</span>
@@ -158,33 +159,31 @@
       class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between"
     >
       <h4>&copy; 2025 Crop Care . All right reserved</h4>
-      <h4>Made with <i class="fa-solid fa-mug-hot" style="color: #FFD43B;"></i> in chennai, India</h4>
+      <h4>
+        Made with<i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+        chennai, India
+      </h4>
     </footer>
     <script>
-      //Quantity control
+      // Quantity control
       function decreaseQuantity() {
         let qty = document.getElementById('quantity')
         let value = parseInt(qty.value)
-        if (value > 1) {
-          qty.value = value - 1
-        }
+        if (value > 1) qty.value = value - 1
       }
+
       function increaseQuantity() {
         let qty = document.getElementById('quantity')
         qty.value = parseInt(qty.value) + 1
       }
 
-      // popup control
+      // Popup control
       const openPopup = document.getElementById('openPopup')
       const closePopup = document.getElementById('closePopup')
       const popupForm = document.getElementById('popupForm')
+      const addCartBtn = document.getElementById('addCartBtn')
 
-      // Open Popup
-      openPopup.addEventListener('click', () => {
-        popupForm.classList.remove('hidden')
-      })
-
-      // Close Popup
+      //close when clicking cancel btn
       closePopup.addEventListener('click', () => {
         popupForm.classList.add('hidden')
       })
@@ -194,6 +193,53 @@
         if (e.target === popupForm) {
           popupForm.classList.add('hidden')
         }
+      })
+
+      // Validation and Redirect for Popup
+      openPopup.addEventListener('click', () => {
+        const date = document.getElementById('date').value
+        const time = document.getElementById('time').value
+
+        if (!date || !time) {
+          alert('please fill in all fields .')
+          return
+        } else {
+          popupForm.classList.remove('hidden')
+        }
+      })
+
+      // Validation and Redirect for cart
+      addCartBtn.addEventListener('click', () => {
+        const orderData = {
+          name: document.getElementById('name').value,
+          phone: document.getElementById('phone').value,
+          address: document.getElementById('address').value,
+          quantity: parseInt(document.getElementById('quantity').value),
+          date: document.querySelector('input[type="date"]').value,
+          startTime: document.querySelectorAll('input[type="time"]')[0].value,
+          endTime: document.querySelectorAll('input[type="time"]')[1].value,
+          equipment: 'Rice Harvester'
+        }
+
+        //save data in localstorage
+        localStorage.setItem('cartData', JSON.stringify(orderData))
+
+        //check valid input
+        const phoneRegex = /^[6-9]\d{9}$/ // Valid Indian number
+
+        if (!orderData.name || !orderData.phone || !orderData.address) {
+          alert('Please fill in all fields.')
+          return
+        }
+
+        if (!phoneRegex.test(orderData.phone)) {
+          alert('Please enter a valid phone number.')
+          return
+        }
+
+        // If everything is valid
+        alert('Details added to cart successfully!')
+        window.location.href = 'cart.html'
       })
     </script>
   </body>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <nav class="bg-green-600 p-4 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-white text-2xl font-bold">
+          <a href="/cropeaseproject/index.html">CropEase</a>
+        </h1>
+        <h1 class="text-white text-2xl font-bold">Checkout</h1>
+      </div>
+    </nav>
+    <div class="max-w-2xl mx-auto p-6 bg-white mt-10 rounded-lg shadow">
+      <h2 class="text-2xl font-bold mb-4">Checkout</h2>
+      <div id="checkoutContent" class="mb-6">
+        <!-- Filled by JavaScript -->
+      </div>
+
+      <!-- Payment Section -->
+      <h3 class="text-xl font-semibold mb-2">Payment Method</h3>
+      <select id="paymentMethod" class="w-full p-2 border rounded mb-4">
+        <option value="">-- Select Payment Method --</option>
+        <option value="card">Credit / Debit Card</option>
+        <option value="upi">UPI</option>
+        <option value="cod">Cash on Delivery</option>
+      </select>
+
+      <!-- Card Payment Fields -->
+      <div id="cardDetails" class="hidden mb-4">
+        <input
+          type="text"
+          id="cardNumber"
+          class="w-full p-2 border rounded mb-2"
+          placeholder="Card Number"
+          maxlength="16"
+        />
+        <input
+          type="text"
+          id="cardName"
+          class="w-full p-2 border rounded mb-2"
+          placeholder="Name on Card"
+        />
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="expiry"
+            class="w-full p-2 border rounded"
+            placeholder="MM/YY"
+            maxlength="5"
+          />
+          <input
+            type="text"
+            id="cvv"
+            class="w-full p-2 border rounded"
+            placeholder="CVV"
+            maxlength="3"
+          />
+        </div>
+      </div>
+
+      <!-- UPI QR Code -->
+      <div id="upiQR" class="hidden mb-4 text-center">
+        <p class="mb-2 text-sm text-gray-600">
+          Scan this QR code with your UPI app
+        </p>
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?data=upi://pay?pa=yourupi@bank&pn=CropEase&am=500&cu=INR&tn=Order"
+          class="mx-auto w-40 h-40 border"
+          alt="UPI QR Code"
+        />
+      </div>
+
+      <button
+        onclick="confirmPayment()"
+        class="w-full bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+      >
+        Confirm & Pay
+      </button>
+
+      <a href="/cropeaseproject/index.html"
+        ><button
+          class="w-full bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 mt-2"
+        >
+          Continue Renting
+        </button></a
+      >
+
+      <!-- Success Message -->
+      <div
+        id="successMessage"
+        class="mt-6 hidden bg-green-100 text-green-800 p-4 rounded text-center"
+      >
+        ✅ Payment Successful! Thank you for your order.
+      </div>
+    </div>
+    <footer
+      class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between"
+    >
+      <h4>&copy; 2025 Crop Care . All right reserved</h4>
+      <h4>
+        Made with<i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+        chennai, India
+      </h4>
+    </footer>
+    <script>
+      //getting details from localstorage
+      const cart = JSON.parse(localStorage.getItem('cartData'))
+
+      const checkoutContent = document.getElementById('checkoutContent')
+
+      //for total hours
+      function calculateTotalHours(startTime, endTime) {
+        const [sh, sm] = startTime.split(':').map(Number)
+        const [eh, em] = endTime.split(':').map(Number)
+        const start = sh * 60 + sm
+        const end = eh * 60 + em
+        return Math.max(1, Math.ceil((end - start) / 60))
+      }
+
+      //showing checkout content
+      if (cart) {
+        const totalHours = calculateTotalHours(cart.startTime, cart.endTime)
+        const totalPrice = totalHours * cart.quantity * 5000
+        checkoutContent.innerHTML = `
+        <h3 class="text-xl font-semibold mb-2 text-green-700">${cart.equipment}</h3>
+        <p><strong>Date:</strong> ${cart.date}</p>
+        <p><strong>Time From:</strong> ${cart.startTime}</p>
+        <p><strong>Time To:</strong> ${cart.endTime}</p>
+        <p><strong>Quantity:</strong> ${cart.quantity}</p>
+        <p><strong>Total:</strong> ₹${totalPrice}</p>
+        <hr class="my-4"/>
+        <h4 class="text-lg font-semibold">Customer Details</h4>
+        <p><strong>Name:</strong> ${cart.name}</p>
+        <p><strong>Phone:</strong> ${cart.phone}</p>
+        <p><strong>Address:</strong> ${cart.address}</p>
+      `
+      }
+
+      //payment section
+      const paymentMethod = document.getElementById('paymentMethod')
+      const cardDetails = document.getElementById('cardDetails')
+      const upiQR = document.getElementById('upiQR')
+
+      paymentMethod.addEventListener('change', () => {
+        const value = paymentMethod.value
+        cardDetails.classList.add('hidden')
+        upiQR.classList.add('hidden')
+
+        if (value === 'card') {
+          cardDetails.classList.remove('hidden')
+        } else if (value === 'upi') {
+          upiQR.classList.remove('hidden')
+        }
+      })
+
+      function confirmPayment() {
+        const method = paymentMethod.value
+
+        if (!method) {
+          alert('Please select a payment method.')
+          return
+        }
+
+        if (method === 'card') {
+          const cardNumber = document.getElementById('cardNumber').value
+          const cardName = document.getElementById('cardName').value
+          const expiry = document.getElementById('expiry').value
+          const cvv = document.getElementById('cvv').value
+
+          if (!cardNumber || !cardName || !expiry || !cvv) {
+            alert('Please fill all card details.')
+            return
+          }
+
+          if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+            alert('Invalid card number')
+            return
+          }
+
+          if (cvv.length !== 3 || isNaN(cvv)) {
+            alert('Invalid CVV')
+            return
+          }
+        }
+
+        //clear the data from local storage after payment success
+        setTimeout(() => {
+          document.getElementById('successMessage').classList.remove('hidden')
+          localStorage.removeItem('cartData')
+        }, 1000)
+      }
+    </script>
+  </body>
+</html>
