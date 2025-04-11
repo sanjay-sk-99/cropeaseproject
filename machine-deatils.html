@@ -5,65 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Machine Details</title>
     <link rel="stylesheet" href="index.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons-->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
   </head>
   <body>
+    <!-- NAVBAR -->
     <nav class="bg-green-600 p-4 shadow-md">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-white text-2xl font-bold">
-          <a href="/cropeaseproject/index.html">CropEase</a>
+          <a href="index.html">CropEase</a>
         </h1>
-        <h1 class="text-white text-2xl font-bold">Equipment details</h1>
+        <h1 class="text-white text-2xl font-bold">Equipment Details</h1>
       </div>
     </nav>
+    <!-- Order Details -->
     <div class="bg-gray-100 flex justify-center items-center min-h-screen">
       <div class="bg-white p-6 rounded-lg shadow-lg w-130 flex h-[27rem]">
         <div class="w-[25rem] h-[22rem]">
           <img
-            src="/cropeaseproject/assets/t-2.webp"
-            alt="Tractor"
-            class="w-full h-full object-cover-center"
+            id="machineImage"
+            src=""
+            alt="Machine Image"
+            class="w-full h-full object-cover rounded"
           />
-          <h3 class="font-semibold text-2xl text-green-600">Mahindra OJA</h3>
+          <h3
+            id="machineName"
+            class="font-semibold text-2xl text-green-600 mt-2"
+          ></h3>
         </div>
         <div>
           <h2 class="text-2xl font-bold mb-4">Order Details</h2>
-
-          <!-- Date Selection -->
           <div class="mb-4">
             <label class="block font-semibold">Select Date:</label>
             <input type="date" id="date" class="w-full p-2 border rounded" />
           </div>
 
-          <!-- Time Selection -->
           <div class="mb-4">
             <label class="block font-semibold">Select Time:</label>
             <div class="flex gap-2">
               <input
                 type="time"
                 min="06:00"
-                id="time"
+                id="startTime"
                 class="p-2 border rounded w-full"
               />
               <span class="p-2">to</span>
-              <input type="time" class="p-2 border rounded w-full" />
+              <input
+                type="time"
+                id="endTime"
+                class="p-2 border rounded w-full"
+              />
             </div>
           </div>
 
-          <!-- Rate Info -->
           <p class="text-gray-700 mb-4">
-            Per Hr Rate: <span class="font-semibold">5000 INR</span>
+            Per Hr Rate:
+            <span id="machineRate" class="font-semibold"></span> INR
           </p>
 
-          <!-- Quantity Selection -->
           <div class="mb-4">
             <label class="block font-semibold">Quantity:</label>
             <div class="flex items-center border rounded w-24">
@@ -83,7 +87,6 @@
             </div>
           </div>
 
-          <!-- Continue Button -->
           <button
             id="openPopup"
             class="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition"
@@ -93,27 +96,22 @@
         </div>
       </div>
     </div>
-
-    <!-- Popup Modal (Hidden Initially) -->
+    <!-- Popup Form  -->
     <div
       id="popupForm"
       class="hidden fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50"
     >
       <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Enter Your Details</h2>
-
-        <!-- Name Input -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Name</label>
           <input
             type="text"
             id="name"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            class="w-full p-2 border rounded-lg"
             placeholder="Your Name"
           />
         </div>
-
-        <!-- Phone Number Input -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700"
             >Phone Number</label
@@ -121,23 +119,19 @@
           <input
             type="tel"
             id="phone"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-            placeholder="123-456-7890"
+            class="w-full p-2 border rounded-lg"
+            placeholder="1234567890"
           />
         </div>
-
-        <!-- Address Input -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Address</label>
           <textarea
             id="address"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            class="w-full p-2 border rounded-lg"
             rows="3"
             placeholder="Your Address"
           ></textarea>
         </div>
-
-        <!-- Buttons -->
         <div class="flex justify-between">
           <button
             id="closePopup"
@@ -155,17 +149,25 @@
       </div>
     </div>
 
-    <footer
-      class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between"
-    >
-      <h4>&copy; 2025 Crop Care . All right reserved</h4>
+    <footer class="bg-green-600 p-4 text-white text-lg flex justify-between">
+      <h4>&copy; 2025 CropEase. All rights reserved</h4>
       <h4>
-        Made with<i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
-        chennai, India
+        Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+        Chennai
       </h4>
     </footer>
+
     <script>
-      // Quantity control
+      //getting details from localstorage
+      const selectedMachine = JSON.parse(
+        localStorage.getItem('selectedMachine')
+      )
+      //Order details control
+      document.getElementById('machineImage').src = selectedMachine.image
+      document.getElementById('machineName').textContent = selectedMachine.name
+      document.getElementById('machineRate').textContent = selectedMachine.rate
+
+      //quantity control
       function decreaseQuantity() {
         let qty = document.getElementById('quantity')
         let value = parseInt(qty.value)
@@ -177,67 +179,65 @@
         qty.value = parseInt(qty.value) + 1
       }
 
-      // Popup control
+      //Popup control
       const openPopup = document.getElementById('openPopup')
       const closePopup = document.getElementById('closePopup')
       const popupForm = document.getElementById('popupForm')
       const addCartBtn = document.getElementById('addCartBtn')
 
-      //close when clicking cancel btn
-      closePopup.addEventListener('click', () => {
+      closePopup.addEventListener('click', () =>
         popupForm.classList.add('hidden')
-      })
-
+      )
       // Close when clicking outside
       window.addEventListener('click', e => {
-        if (e.target === popupForm) {
-          popupForm.classList.add('hidden')
-        }
+        if (e.target === popupForm) popupForm.classList.add('hidden')
       })
 
-      // Validation and Redirect for Popup
+      // Validation and Redirect
       openPopup.addEventListener('click', () => {
         const date = document.getElementById('date').value
-        const time = document.getElementById('time').value
-
-        if (!date || !time) {
-          alert('please fill in all fields .')
+        const startTime = document.getElementById('startTime').value
+        if (!date || !startTime) {
+          alert('Please select date and time.')
           return
-        } else {
-          popupForm.classList.remove('hidden')
         }
+        popupForm.classList.remove('hidden')
       })
 
-      // Validation and Redirect for cart
       addCartBtn.addEventListener('click', () => {
-        const orderData = {
-          name: document.getElementById('name').value,
-          phone: document.getElementById('phone').value,
-          address: document.getElementById('address').value,
-          quantity: parseInt(document.getElementById('quantity').value),
-          date: document.querySelector('input[type="date"]').value,
-          startTime: document.querySelectorAll('input[type="time"]')[0].value,
-          endTime: document.querySelectorAll('input[type="time"]')[1].value,
-          equipment: 'Rice Harvester'
-        }
+        const name = document.getElementById('name').value
+        const phone = document.getElementById('phone').value
+        const address = document.getElementById('address').value
+        const date = document.getElementById('date').value
+        const startTime = document.getElementById('startTime').value
+        const endTime = document.getElementById('endTime').value
+        const quantity = parseInt(document.getElementById('quantity').value)
 
-        //save data in localstorage
-        localStorage.setItem('cartData', JSON.stringify(orderData))
-
-        //check valid input
-        const phoneRegex = /^[6-9]\d{9}$/ // Valid Indian number
-
-        if (!orderData.name || !orderData.phone || !orderData.address) {
+        if (!name || !phone || !address) {
           alert('Please fill in all fields.')
           return
         }
 
-        if (!phoneRegex.test(orderData.phone)) {
+        const phoneRegex = /^[6-9]\d{9}$/ // Valid Indian number
+        if (!phoneRegex.test(phone)) {
           alert('Please enter a valid phone number.')
           return
         }
 
+        const orderData = {
+          name,
+          phone,
+          address,
+          date,
+          startTime,
+          endTime,
+          quantity,
+          equipment: selectedMachine.name,
+          image: selectedMachine.image,
+          rate: selectedMachine.rate
+        }
         // If everything is valid
+        localStorage.setItem('cartData', JSON.stringify(orderData))
         alert('Details added to cart successfully!')
         window.location.href = 'cart.html'
       })
