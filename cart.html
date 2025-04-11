@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cart - CropEase</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body class="bg-gray-100 min-h-screen flex flex-col">
     <nav class="bg-green-600 p-4 shadow-md">
@@ -16,8 +24,14 @@
       </div>
     </nav>
 
-    <div class="flex-grow container mx-auto my-10 bg-white p-6 rounded shadow-md">
-      <h2 class="text-2xl font-semibold mb-4">Your Order Summary</h2>
+    <div
+      class="flex-grow container mx-auto my-10 bg-white p-6 rounded shadow-md"
+    >
+      <h2 class="text-2xl font-semibold mb-4 flex justify-between">
+        Your Order Summary<button onclick="removeOrder()">
+          <i class="fa-solid fa-xmark" style="color: #ec0909"></i>
+        </button>
+      </h2>
       <div id="orderDetails" class="space-y-4">
         <!-- Filled by JavaScript -->
       </div>
@@ -29,7 +43,8 @@
       <div class="text-right mt-6">
         <a
           href="checkout.html"
-          class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
+          class="hidden bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
+          id="checkout"
           >Proceed to Checkout</a
         >
       </div>
@@ -58,8 +73,19 @@
       //getting details from localstorage
       const orderData = JSON.parse(localStorage.getItem('cartData')) || {}
 
+      //select requiered elements
       const orderDetails = document.getElementById('orderDetails')
       const totalPriceEl = document.getElementById('totalPrice')
+      let checkout = document.getElementById('checkout')
+
+      //for deleting cart item
+      function removeOrder() {
+        orderDetails.innerHTML = `<p>No order data found.</p>`
+        totalPriceEl.textContent = 0
+        localStorage.removeItem('cartData')
+        checkout.classList.add('hidden')
+        renderCart()
+      }
 
       //showing order details
       if (orderData.name) {
@@ -69,6 +95,9 @@
         )
         const totalPrice = totalHours * orderData.quantity * 5000
         totalPriceEl.textContent = totalPrice
+
+        //show checkout btn after orderdata recieved
+        checkout.classList.remove('hidden')
 
         orderDetails.innerHTML = `
           <div><strong>Name:</strong> ${orderData.name}</div>
