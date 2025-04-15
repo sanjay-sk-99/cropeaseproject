@@ -61,14 +61,7 @@
     </footer>
 
     <script>
-      //for total hours
-      function calculateTotalHours(startTime, endTime) {
-        const [sh, sm] = startTime.split(':').map(Number)
-        const [eh, em] = endTime.split(':').map(Number)
-        const start = sh * 60 + sm
-        const end = eh * 60 + em
-        return Math.max(1, Math.ceil((end - start) / 60))
-      }
+      
 
       //getting details from localstorage
       const orderData = JSON.parse(localStorage.getItem('cartData')) || {}
@@ -89,16 +82,15 @@
 
       //showing order details
       if (orderData.name) {
-        const totalHours = calculateTotalHours(
-          orderData.startTime,
-          orderData.endTime
-        )
-        const totalPrice = totalHours * orderData.quantity * 5000
+        
+        const totalPrice = orderData.totalTime * orderData.quantity * orderData.rate;
         totalPriceEl.textContent = totalPrice
 
         //show checkout btn after orderdata recieved
         checkout.classList.remove('hidden')
 
+        //SHOWING THE ORDER DEATILS
+        
         orderDetails.innerHTML = `
           <div><strong>Name:</strong> ${orderData.name}</div>
           <div><strong>Phone:</strong> ${orderData.phone}</div>
@@ -107,8 +99,8 @@
           <div><strong>Date:</strong> ${orderData.date}</div>
           <div><strong>Time:</strong> ${orderData.startTime} to ${orderData.endTime}</div>
           <div><strong>Quantity:</strong> ${orderData.quantity}</div>
-          <div><strong>Rate per Hour:</strong> ₹5000</div>
-          <div><strong>Total Hours:</strong> ${totalHours}</div>
+          <div><strong>Rate per Hour:</strong>${orderData.rate}</div>
+          <div><strong>Total Hours:</strong> ${orderData.totalTime}</div>
         `
       } else {
         orderDetails.innerHTML = `<p>No order data found.</p>`
