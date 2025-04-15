@@ -193,6 +193,18 @@
         if (e.target === popupForm) popupForm.classList.add('hidden')
       })
 
+      const dateInput = document.getElementById('date');
+
+    // Set min attribute to today's date
+    const today = new Date();
+    const pad = n => n.toString().padStart(2, '0');
+    const minDate = today.getFullYear() + "-" +
+                    pad(today.getMonth() + 1) + "-" +
+                    pad(today.getDate());
+
+    dateInput.min = minDate;
+
+
       // Validation and Redirect
       openPopup.addEventListener('click', () => {
         const date = document.getElementById('date').value
@@ -223,6 +235,16 @@
           alert('Please enter a valid phone number.')
           return
         }
+        
+          //for total hours
+      function calculateTotalHours(startTime, endTime) {
+        const [sh, sm] = startTime.split(':').map(Number)
+        const [eh, em] = endTime.split(':').map(Number)
+        const start = sh * 60 + sm
+        const end = eh * 60 + em
+        return Math.max(1, Math.ceil((end - start) / 60))
+      }
+       const totalTime = calculateTotalHours(startTime, endTime) 
 
         const orderData = {
           name,
@@ -231,6 +253,7 @@
           date,
           startTime,
           endTime,
+          totalTime,
           quantity,
           equipment: selectedMachine.name,
           image: selectedMachine.image,

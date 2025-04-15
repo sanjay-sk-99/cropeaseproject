@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+     <!-- Font Awesome Icons-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
 
   <body class="bg-gray-100">
@@ -112,21 +121,23 @@
       //getting details from localstorage
       const cart = JSON.parse(localStorage.getItem('cartData'))
 
+      let myOrders = JSON.parse(localStorage.getItem("myOrders")) || [];
+
       const checkoutContent = document.getElementById('checkoutContent')
 
       //for total hours
-      function calculateTotalHours(startTime, endTime) {
-        const [sh, sm] = startTime.split(':').map(Number)
-        const [eh, em] = endTime.split(':').map(Number)
-        const start = sh * 60 + sm
-        const end = eh * 60 + em
-        return Math.max(1, Math.ceil((end - start) / 60))
-      }
+      // function calculateTotalHours(startTime, endTime) {
+      //   const [sh, sm] = startTime.split(':').map(Number)
+      //   const [eh, em] = endTime.split(':').map(Number)
+      //   const start = sh * 60 + sm
+      //   const end = eh * 60 + em
+      //   return Math.max(1, Math.ceil((end - start) / 60))
+      // }
 
       //showing checkout content
       if (cart) {
-        const totalHours = calculateTotalHours(cart.startTime, cart.endTime)
-        const totalPrice = totalHours * cart.quantity * 5000
+        // const totalHours = calculateTotalHours(cart.startTime, cart.endTime)
+        const totalPrice = cart.totalTime * cart.quantity * cart.rate;
         checkoutContent.innerHTML = `
         <h3 class="text-xl font-semibold mb-2 text-green-700">${cart.equipment}</h3>
         <p><strong>Date:</strong> ${cart.date}</p>
@@ -188,12 +199,23 @@
             return
           }
         }
+        //adding payment deatails for order page
+        myOrders.push({
+          ...cart,
+          orderId: "ORD" + Date.now(), // unique ID
+          status: "Paid",
+          odstatus: "Processing",
+          dateOrdered: new Date().toLocaleString(),
+        });
 
+        localStorage.setItem("myOrders", JSON.stringify(myOrders));
+        window.location.href = "myorder.html";
+      
         //clear the data from local storage after payment success
-        setTimeout(() => {
+        // setTimeout(() => {
           document.getElementById('successMessage').classList.remove('hidden')
           localStorage.removeItem('cartData')
-        }, 1000)
+        // }, 1000)
       }
     </script>
   </body>
