@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Crop Ease</title>
-    
+
     <link rel="stylesheet" href="index.css" />
     <!-- Font Awesome Icons-->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +15,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <script src="index.js" defer></script>
+    <script src="main.js" defer></script>
   </head>
   <body>
     <!-- NAVBAR -->
@@ -38,20 +38,18 @@
             class="nav-link text-white font-semibold text-xl transition"
             >For Sellers</a
           >
-          
+
           <a
             href="myorder.html"
             class="nav-link text-white font-semibold text-xl transition"
             >my order
           </a>
-          
+
           <a
             href="cart.html"
             class="nav-link text-white font-semibold text-xl transition"
             ><i class="fa-solid fa-cart-shopping"></i
           ></a>
-
-          
         </div>
         <button class="md:hidden text-white text-2xl focus:outline-none">
           ☰
@@ -78,6 +76,28 @@
       <div class="relative z-10 text-center">
         <h1 class="text-4xl font-bold">Welcome to CropEase</h1>
         <h2 class="mt-2 text-4xl">Rent Top Quality eqipments</h2>
+
+        <!--REGION SELECT-->
+
+        <div class="flex justify-center my-6">
+          <div class="relative w-full max-w-md">
+            <select
+              id="regionSelect"
+              class="appearance-none w-full max-w-md px-4 py-3 rounded-full border border-green-500 text-green-900 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
+            >
+              <option value="Coimbatore">🌍 Coimbatore</option>
+              <option value="Kanur">📍 Kanur</option>
+              <option value="Singanallur">📍 Singanallur</option>
+              <option value="Saravanampatti">📍 Saravanampatti</option>
+            </select>
+            <!-- Down Arrow Icon -->
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-green-500"
+            >
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Equipment Listing Container -->
@@ -124,6 +144,5 @@
         chennai, India
       </h4>
     </footer>
-   
   </body>
 </html>
