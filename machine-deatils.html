@@ -25,20 +25,23 @@
     </nav>
     <!-- Order Details -->
     <div class="bg-gray-100 flex justify-center items-center min-h-screen">
-      <div class="bg-white p-6 rounded-lg shadow-lg w-130 flex h-[27rem]">
-        <div class="w-[25rem] h-[22rem]">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-130 flex h-[31rem]">
+        <div class="w-[25rem] h-[19rem]">
+          <h3
+            id="machineName"
+            class="font-semibold text-2xl text-green-600 mt-2"
+          ></h3>
           <img
             id="machineImage"
             src=""
             alt="Machine Image"
             class="w-[24rem] h-full object-contain rounded"
           />
-          <h3
-            id="machineName"
-            class="font-semibold text-2xl text-green-600 mt-2"
-          ></h3>
+          <p class="font-bold text-lg text-center mr-3 text-[#60697b]"
+          id="machineDesc" 
+        ></p>
         </div>
-        <div>
+        <div class="flex flex-col justify-center">
           <h2 class="text-2xl font-bold mb-4">Order Details</h2>
           <div class="mb-4">
             <label class="block font-semibold">Select Date:</label>
@@ -166,6 +169,7 @@
       document.getElementById('machineImage').src = selectedMachine.image
       document.getElementById('machineName').textContent = selectedMachine.name
       document.getElementById('machineRate').textContent = selectedMachine.rate
+      document.getElementById('machineDesc').textContent=selectedMachine.description
 
       //quantity control
       function decreaseQuantity() {
