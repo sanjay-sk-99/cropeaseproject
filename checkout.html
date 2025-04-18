@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-     <!-- Font Awesome Icons-->
+
+    <!-- Font Awesome Icons-->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -19,13 +19,15 @@
   <body class="bg-gray-100">
     <nav class="bg-green-600 p-4 shadow-md">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-white text-2xl font-bold">
-          <a href="/cropeaseproject/index.html">CropEase</a>
+        <h1 class="text-white md:text-2xl font-bold">
+          <a href="index.html">CropEase</a>
         </h1>
-        <h1 class="text-white text-2xl font-bold">Checkout</h1>
+        <h1 class="text-white md:text-2xl font-bold">Checkout</h1>
       </div>
     </nav>
-    <div class="max-w-2xl mx-auto p-6 bg-white mt-10 rounded-lg shadow">
+    <div
+      class="w-[370px] md:w-[700px] mx-auto p-6 bg-white my-10 rounded-lg shadow"
+    >
       <h2 class="text-2xl font-bold mb-4">Checkout</h2>
       <div id="checkoutContent" class="mb-6">
         <!-- Filled by JavaScript -->
@@ -92,7 +94,7 @@
         Confirm & Pay
       </button>
 
-      <a href="/cropeaseproject/index.html"
+      <a href="index.html"
         ><button
           class="w-full bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 mt-2"
         >
@@ -109,34 +111,23 @@
       </div>
     </div>
     <footer
-      class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between"
+      class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center"
     >
       <h4>&copy; 2025 Crop Care . All right reserved</h4>
       <h4>
-        Made with<i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+        Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
         chennai, India
       </h4>
     </footer>
     <script>
       //getting details from localstorage
-      const cart = JSON.parse(localStorage.getItem('cartData'))
+      const cart = JSON.parse(localStorage.getItem("cartData"));
 
       let myOrders = JSON.parse(localStorage.getItem("myOrders")) || [];
 
-      const checkoutContent = document.getElementById('checkoutContent')
+      const checkoutContent = document.getElementById("checkoutContent");
 
-      //for total hours
-      // function calculateTotalHours(startTime, endTime) {
-      //   const [sh, sm] = startTime.split(':').map(Number)
-      //   const [eh, em] = endTime.split(':').map(Number)
-      //   const start = sh * 60 + sm
-      //   const end = eh * 60 + em
-      //   return Math.max(1, Math.ceil((end - start) / 60))
-      // }
-
-      //showing checkout content
       if (cart) {
-        // const totalHours = calculateTotalHours(cart.startTime, cart.endTime)
         const totalPrice = cart.totalTime * cart.quantity * cart.rate;
         checkoutContent.innerHTML = `
         <h3 class="text-xl font-semibold mb-2 text-green-700">${cart.equipment}</h3>
@@ -150,53 +141,53 @@
         <p><strong>Name:</strong> ${cart.name}</p>
         <p><strong>Phone:</strong> ${cart.phone}</p>
         <p><strong>Address:</strong> ${cart.address}</p>
-      `
+      `;
       }
 
       //payment section
-      const paymentMethod = document.getElementById('paymentMethod')
-      const cardDetails = document.getElementById('cardDetails')
-      const upiQR = document.getElementById('upiQR')
+      const paymentMethod = document.getElementById("paymentMethod");
+      const cardDetails = document.getElementById("cardDetails");
+      const upiQR = document.getElementById("upiQR");
 
-      paymentMethod.addEventListener('change', () => {
-        const value = paymentMethod.value
-        cardDetails.classList.add('hidden')
-        upiQR.classList.add('hidden')
+      paymentMethod.addEventListener("change", () => {
+        const value = paymentMethod.value;
+        cardDetails.classList.add("hidden");
+        upiQR.classList.add("hidden");
 
-        if (value === 'card') {
-          cardDetails.classList.remove('hidden')
-        } else if (value === 'upi') {
-          upiQR.classList.remove('hidden')
+        if (value === "card") {
+          cardDetails.classList.remove("hidden");
+        } else if (value === "upi") {
+          upiQR.classList.remove("hidden");
         }
-      })
+      });
 
       function confirmPayment() {
-        const method = paymentMethod.value
+        const method = paymentMethod.value;
 
         if (!method) {
-          alert('Please select a payment method.')
-          return
+          alert("Please select a payment method.");
+          return;
         }
 
-        if (method === 'card') {
-          const cardNumber = document.getElementById('cardNumber').value
-          const cardName = document.getElementById('cardName').value
-          const expiry = document.getElementById('expiry').value
-          const cvv = document.getElementById('cvv').value
+        if (method === "card") {
+          const cardNumber = document.getElementById("cardNumber").value;
+          const cardName = document.getElementById("cardName").value;
+          const expiry = document.getElementById("expiry").value;
+          const cvv = document.getElementById("cvv").value;
 
           if (!cardNumber || !cardName || !expiry || !cvv) {
-            alert('Please fill all card details.')
-            return
+            alert("Please fill all card details.");
+            return;
           }
 
           if (cardNumber.length !== 16 || isNaN(cardNumber)) {
-            alert('Invalid card number')
-            return
+            alert("Invalid card number");
+            return;
           }
 
           if (cvv.length !== 3 || isNaN(cvv)) {
-            alert('Invalid CVV')
-            return
+            alert("Invalid CVV");
+            return;
           }
         }
         //adding payment deatails for order page
@@ -210,12 +201,10 @@
 
         localStorage.setItem("myOrders", JSON.stringify(myOrders));
         window.location.href = "myorder.html";
-      
+
         //clear the data from local storage after payment success
-        // setTimeout(() => {
-          document.getElementById('successMessage').classList.remove('hidden')
-          localStorage.removeItem('cartData')
-        // }, 1000)
+        document.getElementById("successMessage").classList.remove("hidden");
+        localStorage.removeItem("cartData");
       }
     </script>
   </body>
