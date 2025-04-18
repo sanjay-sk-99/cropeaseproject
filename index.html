@@ -22,17 +22,68 @@
     <nav class="bg-green-600 p-4 shadow-md">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-white text-2xl font-bold">CropEase</h1>
-        <div class="hidden md:flex items-center space-x-6">
-          <a
-            href="equipmentpage.html"
-            class="nav-link text-white font-semibold text-xl transition"
-            >Equipments</a
+        <!-- Dark overlay (initially hidden) -->
+        <div
+          id="overlay"
+          class="fixed inset-0 bg-black bg-opacity-50 hidden md:hidden z-40 transition-opacity duration-300"
+        ></div>
+        <!-- Sidebar Menu (Mobile Only) -->
+        <div
+          id="mobileMenu"
+          class="fixed top-0 left-0 h-full w-64 bg-green-600 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-lg p-6 z-50"
+        >
+          <button
+            id="closeMenu"
+            class="text-white text-2xl absolute top-4 right-4"
           >
+            ✖
+          </button>
+          <nav class="flex flex-col gap-6 mt-10">
+            <a
+              href="aboutus.html"
+              class="nav-link text-white font-semibold text-xl transition"
+              >About Us</a
+            >
+            <a
+              href="equipmentpage.html"
+              class="nav-link text-white font-semibold text-xl transition"
+              >Equipments</a
+            >
+
+            <a
+              href="#"
+              class="nav-link text-white font-semibold text-xl transition"
+              >For Sellers</a
+            >
+
+            <a
+              href="myorder.html"
+              class="nav-link text-white font-semibold text-xl transition"
+              >my order
+            </a>
+
+            <a
+              href="cart.html"
+              class="nav-link text-white font-semibold text-xl transition"
+              ><i class="fa-solid fa-cart-shopping"></i
+            ></a>
+          </nav>
+        </div>
+        <!-- Desktop Nav -->
+        <div
+          class="md:flex flex-col md:flex-row hidden md:items-center gap-6 mt-4 md:mt-0"
+        >
           <a
             href="aboutus.html"
             class="nav-link text-white font-semibold text-xl transition"
             >About Us</a
           >
+          <a
+            href="equipmentpage.html"
+            class="nav-link text-white font-semibold text-xl transition"
+            >Equipments</a
+          >
+
           <a
             href="#"
             class="nav-link text-white font-semibold text-xl transition"
@@ -51,7 +102,10 @@
             ><i class="fa-solid fa-cart-shopping"></i
           ></a>
         </div>
-        <button class="md:hidden text-white text-2xl focus:outline-none">
+        <button
+          id="menuToggle"
+          class="md:hidden text-white text-2xl focus:outline-none"
+        >
           ☰
         </button>
       </div>
@@ -80,7 +134,7 @@
         <!--REGION SELECT-->
 
         <div class="flex justify-center my-6">
-          <div class="relative w-full max-w-md">
+          <div class="relative md:w-full max-w-md">
             <select
               id="regionSelect"
               class="appearance-none w-full max-w-md px-4 py-3 rounded-full border border-green-500 text-green-900 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
@@ -107,7 +161,9 @@
     <!-- REVIEWS -->
     <div class="p-4 bg-gray-200 bg-opacity-50">
       <h2 class="text-xl font-bold mb-4">Reviews</h2>
-      <div class="flex justify-evenly">
+      <div
+        class="flex justify-evenly grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2"
+      >
         <div class="bg-white p-4 shadow-md mx-1">
           <p class="italic">"Great service! Helped me a lot."</p>
           <p class="text-gray-500">
@@ -136,7 +192,7 @@
     </div>
 
     <footer
-      class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between"
+      class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center"
     >
       <h4>&copy; 2025 Crop Care . All right reserved</h4>
       <h4>
@@ -144,5 +200,30 @@
         chennai, India
       </h4>
     </footer>
+    <script>
+      const menuToggle = document.getElementById("menuToggle");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const closeMenu = document.getElementById("closeMenu");
+      const overlay = document.getElementById("overlay");
+
+      // Open sidebar
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.remove("-translate-x-full");
+        mobileMenu.classList.add("translate-x-0");
+        overlay.classList.remove("hidden");
+      });
+
+      // Close sidebar
+      function closeSidebar() {
+        mobileMenu.classList.remove("translate-x-0");
+        mobileMenu.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      }
+
+      closeMenu.addEventListener("click", closeSidebar);
+
+      // Close on click outside sidebar
+      overlay.addEventListener("click", closeSidebar);
+    </script>
   </body>
 </html>

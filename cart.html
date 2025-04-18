@@ -17,15 +17,15 @@
   <body class="bg-gray-100 min-h-screen flex flex-col">
     <nav class="bg-green-600 p-4 shadow-md">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-white text-2xl font-bold">
-          <a href="/cropeaseproject/index.html">CropEase</a>
+        <h1 class="text-white md:text-2xl font-bold">
+          <a href="index.html">CropEase</a>
         </h1>
-        <h1 class="text-white text-2xl font-bold">Cart</h1>
+        <h1 class="text-white md:text-2xl font-bold">Cart</h1>
       </div>
     </nav>
 
     <div
-      class="flex-grow container mx-auto my-10 bg-white p-6 rounded shadow-md"
+      class="flex-grow w-[370px] md:container mx-auto my-10 bg-white p-6 rounded shadow-md "
     >
       <h2 class="text-2xl font-semibold mb-4 flex justify-between">
         Your Order Summary<button onclick="removeOrder()">
@@ -35,7 +35,7 @@
       <div id="orderDetails" class="space-y-4">
         <!-- Filled by JavaScript -->
       </div>
-      <div class="text-right mt-4">
+      <div class="md:text-right mt-4">
         <h3 class="text-xl font-bold">
           Total Price: ₹<span id="totalPrice">0</span>
         </h3>
@@ -51,14 +51,14 @@
     </div>
 
     <footer
-      class="bg-green-600 p-4 text-[#E5E7EB] text-lg flex justify-between inline-block w-full"
-    >
-      <h4>&copy; 2025 Crop Care . All right reserved</h4>
-      <h4>
-        Made with<i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
-        chennai, India
-      </h4>
-    </footer>
+    class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center"
+  >
+    <h4>&copy; 2025 Crop Care . All right reserved</h4>
+    <h4>
+      Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+      chennai, India
+    </h4>
+  </footer>
 
     <script>
       

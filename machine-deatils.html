@@ -17,47 +17,55 @@
     <!-- NAVBAR -->
     <nav class="bg-green-600 p-4 shadow-md">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-white text-2xl font-bold">
+        <h1 class="text-white md:text-2xl font-bold">
           <a href="index.html">CropEase</a>
         </h1>
-        <h1 class="text-white text-2xl font-bold">Equipment Details</h1>
+        <h1 class="text-white md:text-2xl font-bold">Equipment Details</h1>
       </div>
     </nav>
     <!-- Order Details -->
-    <div class="bg-gray-100 flex justify-center items-center min-h-screen">
-      <div class="bg-white p-6 rounded-lg shadow-lg w-130 flex h-[31rem]">
-        <div class="w-[25rem] h-[19rem]">
+    <div class="bg-gray-100 flex justify-center items-center min-h-screen px-4">
+      <div
+        class="bg-white p-6 mx-2 my-3 rounded-lg shadow-lg w-130 flex flex-col lg:flex-row gap-6"
+      >
+        <!-- Machine Info Section -->
+        <div class="w-full lg:w-[25rem]">
           <h3
             id="machineName"
-            class="font-semibold text-2xl text-green-600 mt-2"
+            class="font-semibold text-2xl text-green-600 mb-2"
           ></h3>
           <img
             id="machineImage"
             src=""
             alt="Machine Image"
-            class="w-[24rem] h-full object-contain rounded"
+            class="w-full h-64 object-contain rounded mb-4"
           />
-          <p class="font-bold text-lg text-center mr-3 text-[#60697b]"
-          id="machineDesc" 
-        ></p>
+          <p
+            id="machineDesc"
+            class="font-bold text-base text-center text-[#60697b]"
+          ></p>
         </div>
-        <div class="flex flex-col justify-center">
+
+        <!-- Order Details Section -->
+        <div class="flex-1 flex flex-col justify-center">
           <h2 class="text-2xl font-bold mb-4">Order Details</h2>
+
+          <!-- Date -->
           <div class="mb-4">
-            <label class="block font-semibold">Select Date:</label>
+            <label class="block font-semibold mb-1">Select Date:</label>
             <input type="date" id="date" class="w-full p-2 border rounded" />
           </div>
 
+          <!-- Time -->
           <div class="mb-4">
-            <label class="block font-semibold">Select Time:</label>
-            <div class="flex gap-2">
+            <label class="block font-semibold mb-1">Select Time:</label>
+            <div class="flex flex-col sm:flex-row gap-2">
               <input
                 type="time"
-                min="06:00"
                 id="startTime"
                 class="p-2 border rounded w-full"
               />
-              <span class="p-2">to</span>
+              <span class="p-2 text-center">to</span>
               <input
                 type="time"
                 id="endTime"
@@ -66,14 +74,16 @@
             </div>
           </div>
 
+          <!-- Rate -->
           <p class="text-gray-700 mb-4">
             Per Hr Rate:
             <span id="machineRate" class="font-semibold"></span> INR
           </p>
 
+          <!-- Quantity -->
           <div class="mb-4">
-            <label class="block font-semibold">Quantity:</label>
-            <div class="flex items-center border rounded w-24">
+            <label class="block font-semibold mb-1">Quantity:</label>
+            <div class="flex items-center border rounded w-28">
               <button class="p-2 bg-gray-300" onclick="decreaseQuantity()">
                 -
               </button>
@@ -90,6 +100,7 @@
             </div>
           </div>
 
+          <!-- Continue Button -->
           <button
             id="openPopup"
             class="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition"
@@ -99,6 +110,7 @@
         </div>
       </div>
     </div>
+
     <!-- Popup Form  -->
     <div
       id="popupForm"
@@ -152,103 +164,108 @@
       </div>
     </div>
 
-    <footer class="bg-green-600 p-4 text-white text-lg flex justify-between">
-      <h4>&copy; 2025 CropEase. All rights reserved</h4>
+    <footer
+      class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center"
+    >
+      <h4>&copy; 2025 Crop Care . All right reserved</h4>
       <h4>
         Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
-        Chennai
+        chennai, India
       </h4>
     </footer>
 
     <script>
       //getting details from localstorage
       const selectedMachine = JSON.parse(
-        localStorage.getItem('selectedMachine')
-      )
+        localStorage.getItem("selectedMachine")
+      );
       //Order details control
-      document.getElementById('machineImage').src = selectedMachine.image
-      document.getElementById('machineName').textContent = selectedMachine.name
-      document.getElementById('machineRate').textContent = selectedMachine.rate
-      document.getElementById('machineDesc').textContent=selectedMachine.description
+      document.getElementById("machineImage").src = selectedMachine.image;
+      document.getElementById("machineName").textContent = selectedMachine.name;
+      document.getElementById("machineRate").textContent = selectedMachine.rate;
+      document.getElementById("machineDesc").textContent =
+        selectedMachine.description;
 
       //quantity control
       function decreaseQuantity() {
-        let qty = document.getElementById('quantity')
-        let value = parseInt(qty.value)
-        if (value > 1) qty.value = value - 1
+        let qty = document.getElementById("quantity");
+        let value = parseInt(qty.value);
+        if (value > 1) qty.value = value - 1;
       }
 
       function increaseQuantity() {
-        let qty = document.getElementById('quantity')
-        qty.value = parseInt(qty.value) + 1
+        let qty = document.getElementById("quantity");
+        qty.value = parseInt(qty.value) + 1;
       }
 
       //Popup control
-      const openPopup = document.getElementById('openPopup')
-      const closePopup = document.getElementById('closePopup')
-      const popupForm = document.getElementById('popupForm')
-      const addCartBtn = document.getElementById('addCartBtn')
+      const openPopup = document.getElementById("openPopup");
+      const closePopup = document.getElementById("closePopup");
+      const popupForm = document.getElementById("popupForm");
+      const addCartBtn = document.getElementById("addCartBtn");
 
-      closePopup.addEventListener('click', () =>
-        popupForm.classList.add('hidden')
-      )
+      closePopup.addEventListener("click", () =>
+        popupForm.classList.add("hidden")
+      );
       // Close when clicking outside
-      window.addEventListener('click', e => {
-        if (e.target === popupForm) popupForm.classList.add('hidden')
-      })
+      window.addEventListener("click", (e) => {
+        if (e.target === popupForm) popupForm.classList.add("hidden");
+      });
 
-      const dateInput = document.getElementById('date');
+      const dateInput = document.getElementById("date");
 
-    // Set min attribute to today's date
-    const today = new Date();
-    const pad = n => n.toString().padStart(2, '0');
-    const minDate = today.getFullYear() + "-" +
-                    pad(today.getMonth() + 1) + "-" +
-                    pad(today.getDate());
+      // Set min attribute to today's date
+      const today = new Date();
+      const pad = (n) => n.toString().padStart(2, "0");
+      const minDate =
+        today.getFullYear() +
+        "-" +
+        pad(today.getMonth() + 1) +
+        "-" +
+        pad(today.getDate());
 
-    dateInput.min = minDate;
-
+      dateInput.min = minDate;
 
       // Validation and Redirect
-      openPopup.addEventListener('click', () => {
-        const date = document.getElementById('date').value
-        const startTime = document.getElementById('startTime').value
+      openPopup.addEventListener("click", () => {
+        const date = document.getElementById("date").value;
+        const startTime = document.getElementById("startTime").value;
         if (!date || !startTime) {
-          alert('Please select date and time.')
-          return
+          alert("Please select date and time.");
+          return;
         }
-        popupForm.classList.remove('hidden')
-      })
+        popupForm.classList.remove("hidden");
+      });
 
-      addCartBtn.addEventListener('click', () => {
-        const name = document.getElementById('name').value
-        const phone = document.getElementById('phone').value
-        const address = document.getElementById('address').value
-        const date = document.getElementById('date').value
-        const startTime = document.getElementById('startTime').value
-        const endTime = document.getElementById('endTime').value
-        const quantity = parseInt(document.getElementById('quantity').value)
+      addCartBtn.addEventListener("click", () => {
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const address = document.getElementById("address").value;
+        const date = document.getElementById("date").value;
+        const startTime = document.getElementById("startTime").value;
+        const endTime = document.getElementById("endTime").value;
+        const quantity = parseInt(document.getElementById("quantity").value);
 
         if (!name || !phone || !address) {
-          alert('Please fill in all fields.')
-          return
+          alert("Please fill in all fields.");
+          return;
         }
 
-        const phoneRegex = /^[6-9]\d{9}$/ // Valid Indian number
+        const phoneRegex = /^[6-9]\d{9}$/; // Valid Indian number
         if (!phoneRegex.test(phone)) {
-          alert('Please enter a valid phone number.')
-          return
+          alert("Please enter a valid phone number.");
+          return;
         }
-        
-          //for total hours
-      function calculateTotalHours(startTime, endTime) {
-        const [sh, sm] = startTime.split(':').map(Number)
-        const [eh, em] = endTime.split(':').map(Number)
-        const start = sh * 60 + sm
-        const end = eh * 60 + em
-        return Math.max(1, Math.ceil((end - start) / 60))
-      }
-       const totalTime = calculateTotalHours(startTime, endTime) 
+
+        //for total hours
+        function calculateTotalHours(startTime, endTime) {
+          const [sh, sm] = startTime.split(":").map(Number);
+          const [eh, em] = endTime.split(":").map(Number);
+          const start = sh * 60 + sm;
+          const end = eh * 60 + em;
+          return Math.max(1, Math.ceil((end - start) / 60));
+        }
+        const totalTime = calculateTotalHours(startTime, endTime);
 
         const orderData = {
           name,
@@ -261,13 +278,14 @@
           quantity,
           equipment: selectedMachine.name,
           image: selectedMachine.image,
-          rate: selectedMachine.rate
-        }
+          rate: selectedMachine.rate,
+        };
         // If everything is valid
-        localStorage.setItem('cartData', JSON.stringify(orderData))
-        alert('Details added to cart successfully!')
-        window.location.href = 'cart.html'
-      })
+        localStorage.setItem("cartData", JSON.stringify(orderData));
+        localStorage.removeItem("selectedMachine");
+        alert("Details added to cart successfully!");
+        window.location.href = "cart.html";
+      });
     </script>
   </body>
 </html>
