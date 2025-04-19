@@ -1,229 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crop Ease</title>
 
-    <link rel="stylesheet" href="index.css" />
-    <!-- Font Awesome Icons-->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <script src="main.js" defer></script>
-  </head>
-  <body>
-    <!-- NAVBAR -->
-    <nav class="bg-green-600 p-4 shadow-md">
-      <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-white text-2xl font-bold">CropEase</h1>
-        <!-- Dark overlay (initially hidden) -->
-        <div
-          id="overlay"
-          class="fixed inset-0 bg-black bg-opacity-50 hidden md:hidden z-40 transition-opacity duration-300"
-        ></div>
-        <!-- Sidebar Menu (Mobile Only) -->
-        <div
-          id="mobileMenu"
-          class="fixed top-0 left-0 h-full w-64 bg-green-600 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-lg p-6 z-50"
-        >
-          <button
-            id="closeMenu"
-            class="text-white text-2xl absolute top-4 right-4"
-          >
-            ✖
-          </button>
-          <nav class="flex flex-col gap-6 mt-10">
-            <a
-              href="aboutus.html"
-              class="nav-link text-white font-semibold text-xl transition"
-              >About Us</a
-            >
-            <a
-              href="equipmentpage.html"
-              class="nav-link text-white font-semibold text-xl transition"
-              >Equipments</a
-            >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crop Ease</title>
 
-            <a
-              href="#"
-              class="nav-link text-white font-semibold text-xl transition"
-              >For Sellers</a
-            >
+  <link rel="stylesheet" href="index.css" />
+  <!-- Font Awesome Icons-->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="main.js" defer></script>
+</head>
 
-            <a
-              href="myorder.html"
-              class="nav-link text-white font-semibold text-xl transition"
-              >my order
-            </a>
+<body>
+  <!-- LOGIN/SIGNUP POPUP -->
+  <div id="authModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <h2 class="text-2xl font-bold text-center text-green-600 mb-6">Welcome to CropEase</h2>
 
-            <a
-              href="cart.html"
-              class="nav-link text-white font-semibold text-xl transition"
-              ><i class="fa-solid fa-cart-shopping"></i
-            ></a>
-          </nav>
-        </div>
-        <!-- Desktop Nav -->
-        <div
-          class="md:flex flex-col md:flex-row hidden md:items-center gap-6 mt-4 md:mt-0"
-        >
-          <a
-            href="aboutus.html"
-            class="nav-link text-white font-semibold text-xl transition"
-            >About Us</a
-          >
-          <a
-            href="equipmentpage.html"
-            class="nav-link text-white font-semibold text-xl transition"
-            >Equipments</a
-          >
+      <!-- Tabs -->
+      <div class="flex justify-center mb-4">
+        <button id="loginTab" class="px-4 py-2 font-semibold text-green-600 border-b-2 border-green-600">Login</button>
+        <button id="signupTab" class="px-4 py-2 font-semibold text-gray-600 border-b-2 border-transparent">Sign
+          Up</button>
+      </div>
 
-          <a
-            href="#"
-            class="nav-link text-white font-semibold text-xl transition"
-            >For Sellers</a
-          >
+      <!-- Login Form -->
+      <form id="loginForm" class="space-y-4">
+        <input type="email" placeholder="Email" class="w-full border rounded px-4 py-2" required>
+        <input type="password" placeholder="Password" class="w-full border rounded px-4 py-2" required>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Login</button>
+      </form>
 
-          <a
-            href="myorder.html"
-            class="nav-link text-white font-semibold text-xl transition"
-            >my order
+      <!-- Signup Form -->
+      <form id="signupForm" class="space-y-4 hidden">
+        <input type="text" placeholder="Name" class="w-full border rounded px-4 py-2" required>
+        <input type="email" placeholder="Email" class="w-full border rounded px-4 py-2" required>
+        <input type="password" placeholder="Password" class="w-full border rounded px-4 py-2" required>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Sign Up</button>
+      </form>
+    </div>
+  </div>
+  <!-- NAVBAR -->
+  <nav class="bg-green-600 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-bold">CropEase</h1>
+      <!-- Dark overlay (initially hidden) -->
+      <div id="overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden md:hidden z-40 transition-opacity duration-300"></div>
+      <!-- Sidebar Menu (Mobile Only) -->
+      <div id="mobileMenu"
+        class="fixed top-0 left-0 h-full w-64 bg-green-600 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-lg p-6 z-50">
+        <button id="closeMenu" class="text-white text-2xl absolute top-4 right-4">
+          ✖
+        </button>
+        <nav class="flex flex-col gap-6 mt-10">
+          <a href="aboutus.html" class="nav-link text-white font-semibold text-xl transition">About Us</a>
+          <a href="equipmentpage.html" class="nav-link text-white font-semibold text-xl transition">Equipments</a>
+
+          <a href="sellerreg.html" class="nav-link text-white font-semibold text-xl transition">For Sellers</a>
+
+          <a href="myorder.html" class="nav-link text-white font-semibold text-xl transition">my order
           </a>
 
-          <a
-            href="cart.html"
-            class="nav-link text-white font-semibold text-xl transition"
-            ><i class="fa-solid fa-cart-shopping"></i
-          ></a>
-        </div>
-        <button
-          id="menuToggle"
-          class="md:hidden text-white text-2xl focus:outline-none"
-        >
-          ☰
+          <a href="cart.html" class="nav-link text-white font-semibold text-xl transition"><i
+              class="fa-solid fa-cart-shopping"></i></a>
+          <button id="logoutBtnMob" class="text-white bg-red-500 hover:bg-red-600 px-4 py-1 rounded hidden md:block">
+            Logout
+          </button>
+        </nav>
+      </div>
+      <!-- Desktop Nav -->
+      <div class="md:flex flex-col md:flex-row hidden md:items-center gap-6 mt-4 md:mt-0">
+        <a href="aboutus.html" class="nav-link text-white font-semibold text-xl transition">About Us</a>
+        <a href="equipmentpage.html" class="nav-link text-white font-semibold text-xl transition">Equipments</a>
+
+        <a href="sellerreg.html" class="nav-link text-white font-semibold text-xl transition">For Sellers</a>
+
+        <a href="myorder.html" class="nav-link text-white font-semibold text-xl transition">my order
+        </a>
+
+        <a href="cart.html" class="nav-link text-white font-semibold text-xl transition"><i
+            class="fa-solid fa-cart-shopping"></i></a>
+        <button id="logoutBtn" class="text-white bg-red-500 hover:bg-red-600 px-4 py-1 rounded hidden md:block">
+          Logout
         </button>
       </div>
-    </nav>
-    <!-- index Background Video -->
-    <div
-      class="relative w-full h-screen flex items-center justify-center text-white"
-    >
-      <!-- Background Video -->
-      <video
-        autoplay
-        loop
-        muted
-        playsinline
-        class="absolute top-0 left-0 w-full h-full object-cover -z-10"
-      >
-        <source src="assets/v-1.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <button id="menuToggle" class="md:hidden text-white text-2xl focus:outline-none">
+        ☰
+      </button>
+    </div>
+  </nav>
+  <!-- index Background Video -->
+  <div class="relative w-full h-screen flex items-center justify-center text-white">
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+      <source src="assets/v-1.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
 
-      <!-- Content -->
-      <div class="relative z-10 text-center">
-        <h1 class="text-4xl font-bold">Welcome to CropEase</h1>
-        <h2 class="mt-2 text-4xl">Rent Top Quality eqipments</h2>
+    <!-- Content -->
+    <div class="relative z-10 text-center">
+      <h1 class="text-4xl font-bold">Welcome to CropEase</h1>
+      <h2 class="mt-2 text-4xl">Rent Top Quality eqipments</h2>
 
-        <!--REGION SELECT-->
+      <!--REGION SELECT-->
 
-        <div class="flex justify-center my-6">
-          <div class="relative md:w-full max-w-md">
-            <select
-              id="regionSelect"
-              class="appearance-none w-full max-w-md px-4 py-3 rounded-full border border-green-500 text-green-900 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
-            >
-              <option value="Coimbatore">🌍 Coimbatore</option>
-              <option value="Kanur">📍 Kanur</option>
-              <option value="Singanallur">📍 Singanallur</option>
-              <option value="Saravanampatti">📍 Saravanampatti</option>
-            </select>
-            <!-- Down Arrow Icon -->
-            <div
-              class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-green-500"
-            >
-              <i class="fas fa-chevron-down"></i>
-            </div>
+      <div class="flex justify-center my-6">
+        <div class="relative md:w-full max-w-md">
+          <select id="regionSelect"
+            class="appearance-none w-full max-w-md px-4 py-3 rounded-full border border-green-500 text-green-900 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all">
+            <option value="Coimbatore">🌍 Coimbatore</option>
+            <option value="Kanur">📍 Kanur</option>
+            <option value="Singanallur">📍 Singanallur</option>
+            <option value="Saravanampatti">📍 Saravanampatti</option>
+          </select>
+          <!-- Down Arrow Icon -->
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-green-500">
+            <i class="fas fa-chevron-down"></i>
           </div>
         </div>
       </div>
     </div>
-    <!-- Equipment Listing Container -->
-    <div class="p-4 space-y-10 bg-gray-100" id="equipmentContainer">
-      <!-- Machines will be injected here dynamically -->
-    </div>
-    <!-- REVIEWS -->
-    <div class="p-4 bg-gray-200 bg-opacity-50">
-      <h2 class="text-xl font-bold mb-4">Reviews</h2>
-      <div
-        class="flex justify-evenly grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2"
-      >
-        <div class="bg-white p-4 shadow-md mx-1">
-          <p class="italic">"Great service! Helped me a lot."</p>
-          <p class="text-gray-500">
-            <span style="color: #fdcc0d">⭐⭐⭐⭐⭐</span> - siranjeevi
-          </p>
-        </div>
-        <div class="bg-white p-4 shadow-md mx-1">
-          <p class="italic">"Easy to use. User friendly."</p>
-          <p class="text-gray-500">
-            <span style="color: #fdcc0d">⭐⭐⭐⭐⭐</span> - Habitha
-          </p>
-        </div>
-        <div class="bg-white p-4 shadow-md mx-1">
-          <p class="italic">"Machines comes on time."</p>
-          <p class="text-gray-500">
-            <span style="color: #fdcc0d">⭐⭐⭐⭐ </span>- Mithra
-          </p>
-        </div>
-        <div class="bg-white p-4 shadow-md mx-1">
-          <p class="italic">"It comes on time.It will be very helpfull."</p>
-          <p class="text-gray-500">
-            <span style="color: #fdcc0d">⭐⭐⭐⭐⭐</span> - sanjay
-          </p>
-        </div>
+  </div>
+  <!-- Equipment Listing Container -->
+  <div class="p-4 space-y-10 bg-gray-100" id="equipmentContainer">
+    <!-- Machines will be injected here dynamically -->
+  </div>
+  <!-- REVIEWS -->
+  <div class="p-4 bg-gray-200 bg-opacity-50">
+    <h2 class="text-xl font-bold mb-4">Reviews</h2>
+    <div class="flex justify-evenly grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+      <div class="bg-white p-4 shadow-md mx-1">
+        <p class="italic">"Great service! Helped me a lot."</p>
+        <p class="text-gray-500">
+          <span style="color: #fdcc0d">⭐⭐⭐⭐⭐</span> - siranjeevi
+        </p>
+      </div>
+      <div class="bg-white p-4 shadow-md mx-1">
+        <p class="italic">"Easy to use. User friendly."</p>
+        <p class="text-gray-500">
+          <span style="color: #fdcc0d">⭐⭐⭐⭐⭐</span> - Habitha
+        </p>
+      </div>
+      <div class="bg-white p-4 shadow-md mx-1">
+        <p class="italic">"Machines comes on time."</p>
+        <p class="text-gray-500">
+          <span style="color: #fdcc0d">⭐⭐⭐⭐ </span>- Mithra
+        </p>
+      </div>
+      <div class="bg-white p-4 shadow-md mx-1">
+        <p class="italic">"It comes on time.It will be very helpfull."</p>
+        <p class="text-gray-500">
+          <span style="color: #fdcc0d">⭐⭐⭐⭐⭐</span> - sanjay
+        </p>
       </div>
     </div>
+  </div>
 
-    <footer
-      class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center"
-    >
-      <h4>&copy; 2025 Crop Care . All right reserved</h4>
-      <h4>
-        Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
-        chennai, India
-      </h4>
-    </footer>
-    <script>
-      const menuToggle = document.getElementById("menuToggle");
-      const mobileMenu = document.getElementById("mobileMenu");
-      const closeMenu = document.getElementById("closeMenu");
-      const overlay = document.getElementById("overlay");
+  <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center">
+    <h4>&copy; 2025 Crop Care . All right reserved</h4>
+    <h4>
+      Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+      chennai, India
+    </h4>
+  </footer>
+  <script>
+    const authModal = document.getElementById("authModal");
+    const loginTab = document.getElementById("loginTab");
+    const signupTab = document.getElementById("signupTab");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-      // Open sidebar
-      menuToggle.addEventListener("click", () => {
-        mobileMenu.classList.remove("-translate-x-full");
-        mobileMenu.classList.add("translate-x-0");
-        overlay.classList.remove("hidden");
-      });
+    // Show/hide tabs
+    loginTab.addEventListener("click", () => {
+      loginForm.classList.remove("hidden");
+      signupForm.classList.add("hidden");
+      loginTab.classList.add("text-green-600", "border-green-600");
+      signupTab.classList.remove("text-green-600", "border-green-600");
+    });
 
-      // Close sidebar
-      function closeSidebar() {
-        mobileMenu.classList.remove("translate-x-0");
-        mobileMenu.classList.add("-translate-x-full");
-        overlay.classList.add("hidden");
+    signupTab.addEventListener("click", () => {
+      signupForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+      signupTab.classList.add("text-green-600", "border-green-600");
+      loginTab.classList.remove("text-green-600", "border-green-600");
+    });
+
+    // Simulate login/signup
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      localStorage.setItem("userLoggedIn", "true");
+      authModal.classList.add("hidden");
+    });
+
+    signupForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      localStorage.setItem("userLoggedIn", "true");
+      authModal.classList.add("hidden");
+    });
+
+    // Show popup on load if not logged in
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("userLoggedIn") !== "true") {
+        authModal.classList.remove("hidden");
+      } else {
+        authModal.classList.add("hidden");
       }
+    });
 
-      closeMenu.addEventListener("click", closeSidebar);
 
-      // Close on click outside sidebar
-      overlay.addEventListener("click", closeSidebar);
-    </script>
-  </body>
+    // Show logout only if logged in
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("userLoggedIn") === "true") {
+        logoutBtn.classList.remove("hidden");
+      }
+    });
+
+    // Logout and show popup again
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("userLoggedIn");
+     
+      window.location.reload(); // reload to show modal again
+      logoutBtn.classList.add("hidded");
+      
+    });
+
+    logoutBtnMob.addEventListener("click", () => {
+      localStorage.removeItem("userLoggedIn");
+     
+      window.location.reload(); // reload to show modal again
+      logoutBtn.classList.add("hidded");
+      
+    });
+
+
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeMenu = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+
+    // Open sidebar
+    menuToggle.addEventListener("click", () => {
+      mobileMenu.classList.remove("-translate-x-full");
+      mobileMenu.classList.add("translate-x-0");
+      overlay.classList.remove("hidden");
+    });
+
+    // Close sidebar
+    function closeSidebar() {
+      mobileMenu.classList.remove("translate-x-0");
+      mobileMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    }
+
+    closeMenu.addEventListener("click", closeSidebar);
+
+    // Close on click outside sidebar
+    overlay.addEventListener("click", closeSidebar);
+  </script>
+</body>
+
 </html>
