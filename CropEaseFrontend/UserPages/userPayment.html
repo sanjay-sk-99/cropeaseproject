@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Page</title>
+  <link rel="stylesheet" href="index.css" />
+  <!-- tailwind css -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+  #PaymentCard{
+    background-image: url('/assets/payment-4334491_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      min-height: 610px;
+  }
+  body{
+    background-image: url('/assets/coins-5790121_960_720.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+  }
+</style>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Navigation -->
+  <nav class="bg-green-600 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-bold">
+        <a href="index.html">CropEase | Seller</a>
+      </h1>
+      <h1 class="text-white font-semibold">
+        Payment Page</h1>
+
+    </div>
+  </nav>
+
+  <!-- Payment Section -->
+  <div id="PaymentCard" class="max-w-2xl mx-auto p-6 bg-white shadow-lg mt-8 rounded-lg border border-blue-600">
+    <h2 class="text-2xl font-bold text-green-700 mb-6">Payment Page</h2>
+
+    <div id="machineInfo" class="mb-6"></div>
+
+    <div class="mb-4">
+      <label for="paymentMethod" class="block text-gray-700 mb-2 font-semibold">Select Payment Method:</label>
+      <select id="paymentMethod" onchange="showPaymentFields()" class="border p-2 rounded-md w-full">
+        <option value="">-- Select Payment Method --</option>
+        <option value="bank">Bank Transfer</option>
+        <option value="card">Card Payment</option>
+        <option value="upi">UPI Payment</option>
+        <option value="qr">QR Payment</option>
+      </select>
+    </div>
+
+    <div id="paymentFields" class="space-y-4"></div>
+
+    <div class="mt-6">
+      <button onclick="submitPayment()"
+        class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">
+        Proceed to Pay
+      </button>
+
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center">
+    <h4>&copy; 2025 Crop Care. All rights reserved</h4>
+    <h4>
+      Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+      Chennai, India
+    </h4>
+  </footer>
+
+  <script>
+    var machine = null;
+    var seller = null;
+    var user = null;
+
+    // To store URL params globally
+    var fromDate = null;
+    var toDate = null;
+    var diffHours = null;
+    var totalAmount = null;
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const machineId = params.get("machineId");
+      const userId = params.get("userId");
+      const selerId = params.get("sellerId"); // typo corrected here
+      const region = params.get("region");
+
+      fromDate = params.get("fromDate");
+      toDate = params.get("toDate");
+      diffHours = params.get("diffHours");
+      totalAmount = params.get("totalAmount");
+
+      if (machineId) {
+        fetch(`http://localhost:8080/CropEase/getMachine/${machineId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("machine ", data);
+            machine = data;
+            showMachineInfo(); // Display machine + hour + total amount
+          });
+      }
+
+      if (selerId) {
+        fetch(`http://localhost:8080/CropEase/getSeller/${selerId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("seller ", data);
+            seller = data;
+          });
+      }
+
+      if (userId) {
+        fetch(`http://localhost:8080/api/users/CropEase/getUser/${userId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("user ", data);
+            user = data;
+          });
+      }
+    };
+
+    function showMachineInfo() {
+      const machineInfoDiv = document.getElementById("machineInfo");
+
+      if (machine) {
+        machineInfoDiv.innerHTML = `
+      <h3 class="text-lg font-semibold text-gray-800">${machine.title}</h3>
+      <p class="text-gray-700">Price per Hour: <span class="font-bold text-green-600">₹ ${machine.price}</span></p>
+      <p class="text-gray-700">Seller: ${machine.registerSeller.owner_name} (${machine.registerSeller.email})</p>
+      <p class="text-gray-700">Hours Booked: <span class="font-bold">${diffHours} hours</span></p>
+      <p class="text-gray-700">Total Amount: <span class="font-bold text-green-600">₹ ${totalAmount}</span></p>
+    `;
+      }
+    }
+
+    function submitPayment() {
+      const params = new URLSearchParams(window.location.search);
+      const machineId = params.get("machineId");
+      const userId = params.get("userId");
+      const selleId = params.get("sellerId"); // typo corrected
+      const region = params.get("region");
+
+      if (!machine || !seller || !user) {
+        alert("Details not loaded yet. Please wait.");
+        return;
+      }
+
+      // Order Details (no changes needed for now)
+      const orderDetails = {
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email,
+        userPhoneNo: user.phone_no,
+
+        sellerId: seller.id,
+        sellerName: seller.owner_name,
+        sellerEmail: seller.email,
+        sellerPhoneNo: seller.phone_no,
+
+        machineId: machine.id,
+        machineTitle: machine.title,
+        machineName: machine.name,
+        totalPrice: totalAmount, // corrected to use totalAmount from URL
+        regionName:
+          region || (seller.region ? seller.region.region_name : ""),
+
+        orderStatus: "Placed",
+        verifyStatus: "Pending",
+      };
+
+      console.log("Sending OrderDetails: ", orderDetails);
+
+      fetch("http://localhost:8080/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderDetails),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Order save failed.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Order saved successfully: ", data);
+          alert("Order placed successfully!");
+          // window.location.href = "userOrderPage.html?userId="+userId;
+        })
+        .catch((error) => {
+          console.error("Error saving order: ", error);
+          alert("Order failed. Please try again.");
+        });
+
+      // Payment Details (UPDATED here)
+      const paymentDetails = {
+        userId: parseInt(userId),
+        selleId: selleId,
+        region: region,
+        machineTitle: machine.title,
+        machineId: machine.id,
+        machineDetails: machine.details || "No details available",
+        machineDescription: machine.description || "No description available",
+        fromDate: fromDate,
+        toDate: toDate,
+        hours: parseFloat(diffHours),
+        // totalAmount: parseFloat(totalAmount),
+        totalPrice: totalAmount,
+      };
+
+      console.log("Sending PaymentDetails: ", paymentDetails);
+
+      fetch("http://localhost:8080/CropEase/savePayment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentDetails),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Payment save failed.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Payment saved successfully: ", data);
+          alert("Payment successful!");
+          window.location.href = "userOrderPage.html?userId=" + userId;
+        })
+        .catch((error) => {
+          console.error("Error saving payment: ", error);
+          alert("Payment failed. Please try again.");
+        });
+    }
+
+    function showPaymentFields() {
+      const method = document.getElementById("paymentMethod").value;
+      const paymentFieldsDiv = document.getElementById("paymentFields");
+      paymentFieldsDiv.innerHTML = "";
+
+      if (method === "bank") {
+        paymentFieldsDiv.innerHTML = `
+        <div>
+        <label class="block text-gray-700 mb-1">Account Number:</label>
+        <input type="text" placeholder="Enter Account Number" class="border p-2 w-full rounded-md" />
+        </div>
+        <div>
+        <label class="block text-gray-700 mb-1">IFSC Code:</label>
+        <input type="text" placeholder="Enter IFSC Code" class="border p-2 w-full rounded-md" />
+        </div>
+        `;
+      } else if (method === "card") {
+        paymentFieldsDiv.innerHTML = `
+        <div>
+        <label class="block text-gray-700 mb-1">Card Number:</label>
+        <input type="text" placeholder="Enter Card Number" class="border p-2 w-full rounded-md" />
+        </div>
+        <div class="flex gap-4">
+        <div class="w-1/2">
+        <label class="block text-gray-700 mb-1">Expiry Date:</label>
+        <input type="text" placeholder="MM/YY" class="border p-2 w-full rounded-md" />
+        </div>
+        <div class="w-1/2">
+        <label class="block text-gray-700 mb-1">CVV:</label>
+        <input type="password" placeholder="CVV" class="border p-2 w-full rounded-md" />
+        </div>
+        </div>
+        `;
+      } else if (method === "upi") {
+        paymentFieldsDiv.innerHTML = `
+        <div>
+        <label class="block text-gray-700 mb-1">UPI ID:</label>
+        <input type="text" placeholder="Enter UPI ID (example@upi)" class="border p-2 w-full rounded-md" />
+        </div>
+        `;
+      } else if (method === "qr") {
+        paymentFieldsDiv.innerHTML = `
+        <div class="text-center">
+        <p class="text-gray-700 mb-4 font-semibold">Scan the QR Code to Pay</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?data=upi://pay?pa=example@upi&pn=CropEase&am=${machine ? machine.price : 0
+          }" alt="QR Code" class="mx-auto w-48 h-48" />
+        <p class="text-gray-500 mt-2">UPI ID: example@upi</p>
+        </div>
+        `;
+      }
+    }
+  </script>
+</body>
+
+</html>

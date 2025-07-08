@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Page</title>
+  <link rel="stylesheet" href="index.css" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Custom Animations -->
+  <style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .animate-slideUp {
+      animation: slideUp 0.6s ease-out;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Page Wrapper with Fade In -->
+  <div class="animate-fadeIn">
+
+    <!-- Navigation -->
+    <nav class="bg-green-600 p-4 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-white text-2xl font-bold">
+          <a href="index.html">CropEase</a>
+        </h1>
+        <div class="space-x-4">
+          <button class="nav-link text-white font-medium hover:text-gray-300 transition duration-300">
+            <a href="userLogin.html">Logout</a>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Orders Section -->
+    <div class="container mx-auto p-6">
+      <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">Order List</h2>
+      <div id="orderList" class="grid gap-6"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center animate-fadeIn delay-300">
+      <h4>&copy; 2025 Crop Care. All rights reserved</h4>
+      <h4>
+        Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in Chennai, India
+      </h4>
+    </footer>
+
+  </div>
+
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("userId");
+
+    fetch(`http://localhost:8080/api/orders/user/${userId}`)
+      .then(res => res.json())
+      .then(orders => {
+        console.log("Orders fetched: ", orders);
+        displayOrders(orders);
+      })
+      .catch(error => {
+        console.error("Error fetching orders:", error);
+      });
+
+    function displayOrders(orders) {
+      const orderList = document.getElementById('orderList');
+
+      if (orders.length === 0) {
+        orderList.innerHTML = '<p class="text-center text-gray-600">No orders found.</p>';
+        return;
+      }
+
+      orders.forEach(order => {
+        const orderCard = document.createElement('div');
+        orderCard.className =
+          "bg-white p-6 border border-blue-600 rounded-lg shadow-lg hover:shadow-xl transition animate-slideUp";
+
+        orderCard.innerHTML = `
+   <div class="flex justify-between items-center relative">
+    <div>
+        <h3 class="text-xl absolute left-[450px] font-bold text-green-600 mb-2">${order.machineTitle}</h3>
+        <p class="text-black-700"><span class="font-semibold">Machine Name:</span> ${order.machineName}</p>
+        <p class="text-black-700"><span class="font-semibold">Total Price:</span> ₹ ${order.totalPrice}</p>
+        <p class="text-black-700"><span class="font-semibold">Region:</span> ${order.regionName}</p>
+        
+        <div class="mt-4">
+          <h4 class="text-lg font-semibold text-black-800 mb-1">Seller Details:</h4>
+          <p class="text-black-700">Name: ${order.sellerName}</p>
+          <p class="text-black-700">Phone: ${order.sellerPhoneNo}</p>
+          <p class="text-black-700">Email: ${order.sellerEmail}</p>
+        </div>
+      </div>  
+     <div>
+        <div class="mt-4">
+          <h4 class="text-lg font-semibold text-black-800 mb-1">User Details:</h4>
+          <p class="text-black-700">Name: ${order.userName}</p>
+          <p class="text-black-700">Phone: ${order.userPhoneNo}</p>
+          <p class="text-black-700">Email: ${order.userEmail}</p>
+        </div>
+
+        <div class="mt-4">
+          <p class="text-black-700"><span class="font-semibold">Order Status:</span> ${order.orderStatus}</p>
+          <p class="text-black-700"><span class="font-semibold">Verification Status:</span> ${order.verifyStatus}</p>
+        </div>
+      </div>  
+</div>
+       <div class="mt-6 flex justify-center">
+  <button onclick="generateBill('${encodeURIComponent(JSON.stringify(order))}')" class="bg-green-600 text-white px-4 py-1 rounded-md transition transform duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-green-700">
+    Generate Bill
+  </button>
+</div>
+      `;
+
+        orderList.appendChild(orderCard);
+      });
+    }
+
+    function generateBill(orderJson) {
+      const order = JSON.parse(decodeURIComponent(orderJson));
+
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.text("CropEase - Order Bill", 70, 20);
+      doc.setFontSize(12);
+      doc.text(`Order Details`, 15, 40);
+      doc.line(15, 42, 195, 42);
+
+      let y = 50;
+      doc.text(`Machine Title: ${order.machineTitle}`, 15, y);
+      y += 10;
+      doc.text(`Machine Name: ${order.machineName}`, 15, y);
+      y += 10;
+      doc.text(`Total Price: ₹ ${order.totalPrice}`, 15, y);
+      y += 10;
+      doc.text(`Region: ${order.regionName}`, 15, y);
+
+      y += 15;
+      doc.text(`Seller Info`, 15, y);
+      doc.line(15, y + 2, 195, y + 2);
+      y += 10;
+      doc.text(`Name: ${order.sellerName}`, 15, y);
+      y += 10;
+      doc.text(`Phone: ${order.sellerPhoneNo}`, 15, y);
+      y += 10;
+      doc.text(`Email: ${order.sellerEmail}`, 15, y);
+
+      y += 15;
+      doc.text(`Buyer Info`, 15, y);
+      doc.line(15, y + 2, 195, y + 2);
+      y += 10;
+      doc.text(`Name: ${order.userName}`, 15, y);
+      y += 10;
+      doc.text(`Phone: ${order.userPhoneNo}`, 15, y);
+      y += 10;
+      doc.text(`Email: ${order.userEmail}`, 15, y);
+
+      y += 15;
+      doc.text(`Order Status: ${order.orderStatus}`, 15, y);
+      y += 10;
+      doc.text(`Verification Status: ${order.verifyStatus}`, 15, y);
+
+      doc.save(`Order_Bill_${order.id}.pdf`);
+    }
+  </script>
+</body>
+
+</html>

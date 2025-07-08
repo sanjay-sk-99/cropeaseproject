@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Machine Details</title>
+  <link rel="stylesheet" href="index.css" />
+  <!-- tailwind css -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body style="background-image: url('data:image/jpeg;base64,${machine.image}');">
+
+  <!-- Navigation -->
+  <nav class="bg-green-600 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-bold">
+        <a href="index.html">CropEase | Seller</a>
+      </h1>
+      <h1 class="text-white font-semibold">
+        Machine Details</h1>
+
+    </div>
+  </nav>
+
+  <div id="machineDetails" class="max-w-3xl mx-auto p-6 bg-white shadow-lg mt-6 mb-6 rounded-lg"></div>
+
+  <!-- FOOTER -->
+  <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center">
+    <h4>&copy; 2025 Crop Care. All rights reserved</h4>
+    <h4>
+      Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+      Chennai, India
+    </h4>
+  </footer>
+
+  <script>
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const machineId = params.get("machineId");
+      const userId = params.get("userId");
+      const sellerId = params.get("sellerId");
+      const region = params.get("region");
+
+      if (machineId) {
+        fetch(`http://localhost:8080/CropEase/getMachine/${machineId}`)
+          .then(res => res.json())
+          .then(machine => {
+
+            document.body.style.backgroundImage = `url('data:image/jpeg;base64,${machine.image}')`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundRepeat = 'no-repeat';
+
+            
+            const machineDetailsDiv = document.getElementById("machineDetails");
+
+            machineDetailsDiv.innerHTML = `<h2 class="text-3xl font-bold text-green-700 mb-2">${machine.title}</h2>
+            <div class="flex flex-col md:flex-row gap-6">
+  
+                <div class="md:w-1/2 w-full">
+                   <img src="data:image/jpeg;base64,${machine.image}" alt="${machine.title}" class="rounded-md shadow-md w-full h-80 object-cover" />
+
+            <div class="mt-8">
+                <h3 class="font-semibold text-lg">Seller Information:</h3>
+                 <p class="text-gray-700"><span class="font-semibold text-black">Name:</span> ${machine.registerSeller.owner_name}</p>
+                 <p class="text-gray-700"><span class="font-semibold text-black">Email:</span> ${machine.registerSeller.email}</p>
+                 <p class="text-gray-700"><span class="font-semibold text-black">Phone:</span> ${machine.registerSeller.phone_no}</p>
+             </div>
+             </div> 
+                <div class="w-full md:w-1/2 md:pl-6 mt-4 md:mt-0">
+                  <p class="text-gray-700 mb-2"><span class="font-semibold text-black">Details:</span> ${machine.machine_details}</p>
+                  <p class="text-gray-700 mb-2"><span class="font-semibold text-black">Description:</span> ${machine.description}</p>
+                  <p class="text-gray-700 mb-2"><span class="font-semibold text-black">Region:</span> ${machine.regionName}</p>
+                  <p class="text-2xl font-bold text-green-600 mt-4">₹ ${machine.price} <span class="text-sm font-medium text-gray-500">/ hour</span></p>
+
+                  <div class="mt-6">
+                    <h3 class="font-semibold text-lg mb-2">Select Booking Time:</h3>
+                    <div class="flex flex-col gap-4">
+                      <div>
+                        <label class="block text-gray-700 mb-1">From Date and Time:</label>
+                        <input type="datetime-local" id="fromDateTime" class="border p-2 w-full rounded-md">
+                      </div>
+                      <div>
+                        <label class="block text-gray-700 mb-1">To Date and Time:</label>
+                        <input type="datetime-local" id="toDateTime" class="border p-2 w-full rounded-md">
+                      </div>
+                      <div class="mt-4">
+                        <button onclick="calculateTotal(${machine.price})" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">Calculate Total Amount</button>
+                      </div>
+                      <div id="totalAmount" class="text-lg font-medium text-green-700 mt-4"></div>
+                      <div id="cartButton" class="mt-4 flex justify-end "></div>
+                    </div>
+                  </div>
+
+                 
+                </div>
+              </div>
+            `;
+          });
+      }
+    };
+
+    function calculateTotal(pricePerHour) {
+      const fromInput = document.getElementById('fromDateTime').value;
+      const toInput = document.getElementById('toDateTime').value;
+
+      if (!fromInput || !toInput) {
+        alert('Please select both From and To Date and Time!');
+        return;
+      }
+
+      const fromDate = new Date(fromInput);
+      const toDate = new Date(toInput);
+
+      if (toDate <= fromDate) {
+        alert('To Date and Time must be after From Date and Time!');
+        return;
+      }
+
+      const diffMs = toDate - fromDate; // Difference in milliseconds
+      const diffHours = diffMs / (1000 * 60 * 60); // Convert to hours
+
+      const totalAmount = diffHours * pricePerHour;
+
+      document.getElementById('totalAmount').innerText = `Total Amount: ₹ ${totalAmount.toFixed(2)} (${diffHours.toFixed(2)} hours)`;
+
+      // After calculating total amount, create the Add Cart button
+      const params = new URLSearchParams(window.location.search);
+      const machineId = params.get("machineId");
+      const userId = params.get("userId");
+      const sellerId = params.get("sellerId");
+      const region = params.get("region");
+
+      const cartButtonDiv = document.getElementById('cartButton');
+
+      const url = `userPayment.html?machineId=${machineId}&userId=${userId}&sellerId=${sellerId}&region=${region}&fromDate=${encodeURIComponent(fromInput)}&toDate=${encodeURIComponent(toInput)}&totalAmount=${totalAmount.toFixed(2)}&diffHours=${diffHours.toFixed(2)}`;
+
+      cartButtonDiv.innerHTML = `
+        <a href="${url}" class="bg-green-600 text-white py-2 px-4 rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-green-700 ... ">Proceed to Payment</a>
+      `;
+    }
+  </script>
+
+</body>
+
+</html>

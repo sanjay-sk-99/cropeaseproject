@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crop Ease</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="index.css" />
+  <script src="tailwind.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      body {
+      background-image: url('/assets/wmremove-transformed.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              fadeIn: "fadeIn 1s ease-in-out",
+              slideIn: "slideIn 0.6s ease-out",
+              shimmer: "shimmer 1.5s infinite linear"
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' }
+              },
+              slideIn: {
+                '0%': { transform: 'translateY(-100%)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' }
+              },
+              shimmer: {
+                '0%': { backgroundPosition: '-1000px 0' },
+                '100%': { backgroundPosition: '1000px 0' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    
+</head>
+
+<body >
+
+  <!-- NAVBAR -->
+  <nav class="bg-green-600 p-4 shadow-md animate-slideIn">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white md:text-2xl font-bold">
+        <a href="index.html">CropEase</a>
+      </h1>
+      <h1 class="text-white md:text-2xl font-bold"> <a href="sellerLogin.html">Login</a></h1>
+    </div>
+  </nav>
+
+  <!-- Signup Form (unchanged) -->
+  <div id="signupSection" class="ml-auto mr-8 mt-10 w-[600px] p-8 animate-fadeIn">
+    <div class="bg-white shadow-md rounded-lg p-8">
+      <h2 class="text-2xl font-bold text-green-600 mb-6 text-center bg-gradient-to-r from-green-500 via-white to-green-500 bg-[length:200%_100%] bg-clip-text ">Seller Registration</h2>
+      <div id="alert" style="color: red; display: none;"></div>
+      <form class="space-y-4" action="http://localhost:8080/registerSeller" method="post">
+        <div> 
+          <label for="businessName" class="block text-gray-700 text-sm font-bold mb-2">Business Name</label>
+          <input type="text" id="businessName" name="business_name"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your business name" required>
+        </div>
+        <div>
+          <label for="ownerName" class="block text-gray-700 text-sm font-bold mb-2">Owner Name</label>
+          <input type="text" id="ownerName" name="owner_name"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter the owner's name" required>
+        </div>
+        <div>
+          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+          <input type="email" id="email" name="email" 
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your email" required>
+        </div>
+        <div>
+          <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
+          <input type="tel" id="phone" name="phone_no"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your phone number" required>
+        </div>
+        <div>
+          <label for="address" class="block text-gray-700 text-sm font-bold mb-2">Business Address</label>
+          <textarea id="address" rows="3" name="business_address" 
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your business address" required></textarea>
+        </div>
+        <div>
+          <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+          <input type="password" id="password" name="password"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Create a password" required>
+        </div>
+        <div>
+          <label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirm_password"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Confirm your password" required>
+           
+        </div>
+        <div>
+          <label for="region" class="block text-gray-700 text-sm font-bold mb-2">Region</label>
+          <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="regionDropdown" name="regionId" required></select><br><br>
+        </div>
+        
+
+        <div class="flex items-center justify-between">
+          <button
+          id="register"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit">
+            Register
+          </button>
+          <button type="button" id="openLoginModal"
+            class="inline-block align-baseline font-semibold text-sm text-green-500 hover:text-green-800">
+            <a href="sellerLogin.html">Already have an account? Login</a>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal"
+  class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <button class="absolute top-2 right-4 text-gray-500 text-2xl font-bold close-button">&times;</button>
+      <h2 class="text-2xl font-bold text-green-600 mb-6 text-center">Login</h2>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label for="loginEmail" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+          <input type="email" id="loginEmail"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your email" required />
+        </div>
+        <div>
+          <label for="loginPassword" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+          <input type="password" id="loginPassword"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your password" required />
+        </div>
+        <div class="flex items-center justify-between">
+          <button type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Login
+          </button>
+          <button type="button" id="backToSignup"
+            class="text-green-500 hover:text-green-800 text-sm font-semibold">Back to Signup</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center">
+    <h4>&copy; 2025 Crop Care. All rights reserved</h4>
+    <h4>Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in Chennai, India</h4>
+  </footer>
+
+  <!-- Script -->
+  <script>
+
+window.onload = function(){
+
+  const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+
+    const alertDiv = document.getElementById("alert");
+    if (error === "duplicate") {
+      alertDiv.textContent = "Email is already registered!";
+      alertDiv.style.display = "block";
+    }
+
+    fetch("http://localhost:8080/regions")
+      .then((res) => res.json())
+      .then(regions => {
+
+        const regionSelect = document.getElementById("regionDropdown");
+
+        regions.forEach(region => {
+
+          const option = document.createElement("option");
+          option.value = region.id;
+          option.textContent = region.region_name;
+          option.id = region.id;
+          regionSelect.appendChild(option);
+        });
+
+        console.log(regions);
+
+        
+      })
+
+    }
+
+    const loginModal = document.getElementById("loginModal");
+    const openLoginModalButton = document.getElementById("openLoginModal");
+    const closeButton = document.querySelector(".close-button");
+    const backToSignup = document.getElementById("backToSignup");
+    const signupSection = document.getElementById("signupSection");
+
+    openLoginModalButton.addEventListener("click", () => {
+      loginModal.classList.remove("hidden");
+      loginModal.classList.add("flex");
+      signupSection.classList.add("hidden");
+    });
+
+    function closeModal() {
+      loginModal.classList.add("hidden");
+      loginModal.classList.remove("flex");
+      signupSection.classList.remove("hidden");
+    }
+
+    closeButton.addEventListener("click", closeModal);
+    backToSignup.addEventListener("click", closeModal);
+
+    window.addEventListener("click", (event) => {
+      if (event.target === loginModal) {
+        closeModal();
+      }
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      console.log("Login submitted");
+      closeModal();
+      window.location.href="sellerpage.html";
+    });
+    document.getElementById("register").addEventListener("submit", function (event) {
+      event.preventDefault();
+      window.location.href="sellerpage.html";
+    });
+  </script>
+
+</body>
+
+</html>
