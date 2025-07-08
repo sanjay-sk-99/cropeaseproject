@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Machine | cropEase</title>
+  <link rel="stylesheet" href="index.css" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Custom Animations -->
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
+    .delay-700 { animation-delay: 0.7s; }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col fade-in-up">
+
+  <!-- Navbar -->
+  <nav class="bg-green-600 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-bold">
+        <a href="index.html">CropEase</a>
+      </h1>
+      <div class="space-x-4">
+        <button id="machine-details" class="nav-link text-white font-medium hover:text-gray-300">Machine Details</button>
+        <button id="log-out" class="nav-link text-white hover:text-red-600 font-medium">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="relative w-full h-[700px] flex items-center justify-center text-white">
+    <img src="addmachinebg.jpg" alt="bg-image" class="absolute top-0 left-0 w-full h-full object-cover -z-10" />
+    <main class="flex-grow flex items-center justify-center px-4 py-4">
+      <div class="bg-white/90 shadow-lg rounded-lg p-8 w-full max-w-xl fade-in-up">
+        <h1 class="text-3xl font-bold text-green-600 text-center mb-8 fade-in-up delay-100">Add New Machine</h1>
+
+        <form id="machineForm" action="http://localhost:8080/CropEase/addMachine" method="post"
+          enctype="multipart/form-data" class="space-y-4">
+
+          <div class="fade-in-up delay-200">
+            <label for="name" class="block font-medium text-gray-700">Machine Name</label>
+            <input type="text" name="name" id="name" placeholder="Enter machine name"
+              class="w-full text-black border border-gray-300 p-2 rounded-md bg-gray-100"
+              required minlength="3" />
+          </div>
+
+          <div class="fade-in-up delay-300">
+            <label for="title" class="block font-medium text-gray-700">Title</label>
+            <input type="text" name="title" id="title" placeholder="Enter title"
+              class="w-full text-black border border-gray-300 p-2 rounded-md bg-gray-100"
+              required minlength="3" />
+          </div>
+
+          <div class="fade-in-up delay-400">
+            <label for="machine_details" class="block font-medium text-gray-700">Machine Details</label>
+            <input type="text" name="machine_details" id="machine_details" placeholder="Enter machine type or category"
+              class="w-full text-black border border-gray-300 p-2 rounded-md bg-gray-100"
+              required minlength="5" />
+          </div>
+
+          <div class="fade-in-up delay-500">
+            <label for="description" class="block font-medium text-gray-700">Description</label>
+            <textarea name="description" id="description" placeholder="Write a short description..."
+              class="w-full text-black border border-gray-300 p-2 rounded-md bg-gray-100"
+              required minlength="10"></textarea>
+          </div>
+
+          <div class="fade-in-up delay-600">
+            <label for="price" class="block font-medium text-gray-700">Per Hour Price (INR)</label>
+            <input type="number" name="price" id="price" placeholder="1000"
+              class="w-full text-black border border-gray-300 p-2 rounded-md bg-gray-100"
+              required min="1" />
+          </div>
+
+          <div class="fade-in-up delay-700">
+            <label for="image" class="block font-medium text-gray-700">Image</label>
+            <input type="file" name="image" id="image"
+              class="w-full border border-gray-300 p-2 rounded-md bg-gray-100 bg-white"
+              accept="image/png, image/jpeg" required />
+            <small class="text-xs text-gray-600">Max 2MB | JPEG/PNG only</small>
+          </div>
+
+          <input type="number" name="registerSeller" id="registerSeller" style="display: none;" />
+          <input type="text" name="regionName" id="regionName" style="display: none;" />
+
+          <div class="text-center fade-in-up delay-700">
+            <button type="submit"
+              class="bg-green-600 text-white w-full font-semibold px-4 py-2 rounded-md transform transition-all duration-300 hover:scale-105 hover:bg-green-700 hover:shadow-lg">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center">
+    <h4>&copy; 2025 Crop Care. All rights reserved</h4>
+    <h4>Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in Chennai, India</h4>
+  </footer>
+
+  <!-- Seller ID and Region Fill Script -->
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const sellerId = params.get("sellerId");
+      const region = params.get("region");
+
+      if (sellerId) document.getElementById("registerSeller").value = sellerId;
+      if (region) document.getElementById("regionName").value = region;
+    };
+  </script>
+
+  <!-- Validation Script -->
+  <script>
+    document.getElementById("machineForm").addEventListener("submit", function (e) {
+      const price = document.getElementById("price").value;
+      const imageInput = document.getElementById("image");
+
+      if (price <= 0 || isNaN(price)) {
+        alert("Please enter a valid price.");
+        e.preventDefault();
+        return;
+      }
+
+      if (imageInput.files.length > 0) {
+        const file = imageInput.files[0];
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        const maxSizeMB = 2;
+
+        if (!allowedTypes.includes(file.type)) {
+          alert("Only JPG and PNG images are allowed.");
+          e.preventDefault();
+        } else if (file.size > maxSizeMB * 1024 * 1024) {
+          alert("Image size should be less than 2MB.");
+          e.preventDefault();
+        }
+      }
+    });
+  </script>
+
+</body>
+
+</html>

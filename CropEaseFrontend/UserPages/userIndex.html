@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Index - CropEase</title>
+  <link rel="stylesheet" href="index.css" />
+  <!-- tailwind css -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-green-600 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white md:text-2xl font-bold">
+        <a href="index.html">CropEase</a>
+      </h1>
+      <div>
+      <button class="nav-link text-white font-medium hover:text-gray-600 mr-3"><a href="userRegister.html">Register</a></button>
+      <button class="nav-link text-white font-medium hover:text-gray-600"><a href="userLogin.html">Login</a></button>
+    </div>
+    </div>
+  </nav>
+
+  <div class="relative w-full h-screen flex items-center justify-center text-white">
+    <!-- Background image -->
+    <img src="userhomebgimage-1.jpg" alt="bg-image" class="absolute top-0 left-0 w-full h-full object-fitt -z-10">
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col justify-center items-end mr-5 px-4 py-12 text-center">
+      <h2 class="text-3xl font-bold text-green-700 mb-8">Welcome, User!</h2>
+
+      <div class="space-y-4 ">
+        <button
+          class="bg-green-600 flex justify-center w-60 mx-auto py-2 rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-green-700 ...">
+          <a href="userRegister.html">
+            Register
+          </a></button>
+        <button
+          class="bg-green-600 w-60 mx-auto py-2 rounded-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-green-700 ...">
+          <a href="userLogin.html">
+            Login
+          </a></button>
+      </div>
+    </main>
+
+  </div>
+
+
+  <footer class="bg-green-600 p-4 text-[#E5E7EB] md:text-lg md:flex justify-between text-center">
+    <h4>&copy; 2025 Crop Care . All right reserved</h4>
+    <h4>
+      Made with <i class="fa-solid fa-mug-hot" style="color: #ffd43b"></i> in
+      chennai, India
+    </h4>
+  </footer>
+
+</body>
+
+</html>

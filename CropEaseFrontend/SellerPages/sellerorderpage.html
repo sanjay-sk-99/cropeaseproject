@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Seller Orders</title>
+  <link rel="stylesheet" href="index.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
+
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <!-- jsPDF and html2canvas for PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col animate-fade-in">
+  <!-- NAVBAR -->
+  <nav class="bg-green-600 p-4 shadow-md animate-fade-in-up">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white md:text-2xl font-bold">
+        <a href="index.html">CropEase | Seller</a>
+      </h1>
+      <div class="space-x-2">
+        <button onclick="exportToExcel()" class="bg-violet-500 hover:bg-violet-600 text-white px-2 py-1 rounded-lg transition transform hover:scale-105 duration-300">Export to Excel</button>
+        <button onclick="exportToPDF()" class="bg-violet-500 hover:bg-violet-600 text-white px-2 py-1 rounded-lg transition transform hover:scale-105 duration-300">Export to PDF</button>
+        <button id="log-out" class="nav-link text-white font-medium hover:text-red-600 transition duration-300"><a href="./sellerLogin.html">Logout</a></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ORDER CONTAINER -->
+  <div class="flex-grow container mx-auto p-6 fade-in-up">
+    <h2 class="text-2xl font-bold mb-6 text-center animate-fade-in-up">My Orders</h2>
+    <div id="ordersContainer" class="space-y-6">
+      <!-- Orders will be inserted here -->
+    </div>
+  </div>
+
+  <footer class="bg-green-600 p-4 text-white md:text-lg md:flex justify-between text-center animate-fade-in-up">
+    <h4>&copy; 2025 Crop Care. All rights reserved</h4>
+    <h4>Made with <i class="fa-solid fa-mug-hot text-yellow-400"></i> in Chennai, India</h4>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sellerIdUrl = params.get("sellerId");
+
+    fetch(`http://localhost:8080/api/orders/seller/${sellerIdUrl}`)
+      .then(res => res.json())
+      .then(orders => {
+        const ordersContainer = document.getElementById("ordersContainer");
+
+        if (orders.length === 0) {
+          ordersContainer.innerHTML = "<p class='text-center'>No orders found.</p>";
+          return;
+        }
+
+        orders.forEach((order, index) => {
+          const orderCard = document.createElement("div");
+          orderCard.className = "bg-white rounded-lg shadow-md p-6 border border-blue-500 opacity-0 translate-y-6";
+          setTimeout(() => {
+            orderCard.classList.add("fade-in-up");
+            orderCard.style.animationDelay = `${index * 100}ms`;
+          }, 100);
+
+          orderCard.innerHTML = `
+            <h3 class="text-xl font-bold mb-2">${order.machineName} - ₹${order.totalPrice}</h3>
+            <p><strong>Machine Title:</strong> ${order.machineTitle}</p>
+            <p><strong>Region:</strong> ${order.regionName}</p>
+            <p><strong>Buyer Name:</strong> ${order.userName}</p>
+            <p><strong>Buyer Phone:</strong> ${order.userPhoneNo}</p>
+            <p><strong>Buyer Email:</strong> ${order.userEmail}</p>
+            <p><strong>Verify Status:</strong> <span id="verifyStatus-${order.id}">${order.verifyStatus}</span></p>
+            <p><strong>Order Status:</strong> <span id="orderStatus-${order.id}">${order.orderStatus}</span></p>
+            <div class="mt-4 flex gap-4">
+              <button onclick="verifyOrder(${order.id})" class="bg-blue-500 text-white px-4 py-1 rounded-md hover:scale-110 transition duration-300">Verify</button>
+              <button onclick="confirmOrder(${order.id})" class="bg-green-600 text-white px-4 py-1 rounded-md hover:scale-110 transition duration-300">Confirm</button>
+            </div>
+          `;
+          ordersContainer.appendChild(orderCard);
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching orders:", error);
+      });
+
+    function verifyOrder(orderId) {
+      fetch(`http://localhost:8080/api/orders/${orderId}`)
+        .then(res => res.json())
+        .then(order => {
+          order.verifyStatus = "Verified";
+          return fetch(`http://localhost:8080/api/orders/${orderId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order)
+          });
+        })
+        .then(() => {
+          document.getElementById(`verifyStatus-${orderId}`).innerText = "Verified";
+          alert("Order verified successfully!");
+        })
+        .catch(error => {
+          console.error("Error verifying order:", error);
+        });
+    }
+
+    function confirmOrder(orderId) {
+      fetch(`http://localhost:8080/api/orders/${orderId}`)
+        .then(res => res.json())
+        .then(order => {
+          order.orderStatus = "Confirmed";
+          return fetch(`http://localhost:8080/api/orders/${orderId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order)
+          });
+        })
+        .then(() => {
+          document.getElementById(`orderStatus-${orderId}`).innerText = "Confirmed";
+          alert("Order confirmed successfully!");
+        })
+        .catch(error => {
+          console.error("Error confirming order:", error);
+        });
+    }
+
+    function exportToExcel() {
+      const orders = document.querySelectorAll('#ordersContainer > div');
+      if (!orders.length) {
+        alert("No orders to export.");
+        return;
+      }
+
+      const data = [["Machine Name", "Price", "Machine Title", "Region", "Buyer Name", "Phone", "Email", "Verify Status", "Order Status"]];
+
+      orders.forEach(order => {
+        const machineName = order.querySelector("h3").innerText;
+        const details = order.querySelectorAll("p");
+        const row = [
+          machineName.split(" - ₹")[0],
+          machineName.split(" - ₹")[1],
+          details[0].innerText.split(": ")[1],
+          details[1].innerText.split(": ")[1],
+          details[2].innerText.split(": ")[1],
+          details[3].innerText.split(": ")[1],
+          details[4].innerText.split(": ")[1],
+          details[5].innerText.split(": ")[1],
+          details[6].innerText.split(": ")[1],
+        ];
+        data.push(row);
+      });
+
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+      XLSX.writeFile(workbook, "SellerOrders.xlsx");
+    }
+
+    function exportToPDF() {
+      const container = document.getElementById("ordersContainer");
+
+      html2canvas(container).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jspdf.jsPDF("p", "mm", "a4");
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgProps = pdf.getImageProperties(imgData);
+        const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save("SellerOrders.pdf");
+      });
+    }
+  </script>
+</body>
+
+</html>

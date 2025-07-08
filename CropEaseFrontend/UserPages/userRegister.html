@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Register - CropEase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes zoomBg {
+      0% {
+        background-size: 100%;
+      }
+      50% {
+        background-size: 105%;
+      }
+      100% {
+        background-size: 100%;
+      }
+    }
+
+    body {
+      background-image: url('/assets/wmremove-transformed%20(1).jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: zoomBg 20s ease-in-out infinite;
+    }
+
+    .fade-in-up {
+      animation: fadeUp 1s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-green-600 p-4 shadow-md fade-in-up">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-bold">
+        <a href="index.html">CropEase</a>
+      </h1>
+      <div class="space-x-4">
+        <a href="userLogin.html" class="text-white font-medium hover:underline transition-transform duration-300 hover:scale-105">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Form Section -->
+  <main class="ml-8 mt-10 w-[600px] p-8 fade-in-up delay-200">
+    <div class="bg-green-100 p-8 rounded-2xl shadow-xl w-full max-w-lg transform transition duration-700 hover:scale-[1.02]">
+      <h2 class="text-3xl font-extrabold text-center text-green-700 mb-6">User Registration</h2>
+
+      <form id="registerForm" class="space-y-5">
+        <div>
+          <label for="name" class="block font-medium text-gray-700">Name</label>
+          <input type="text" id="name" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition transform focus:scale-105"/>
+        </div>
+
+        <div>
+          <label for="email" class="block font-medium text-gray-700">Email</label>
+          <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition transform focus:scale-105"/>
+        </div>
+
+        <div>
+          <label for="password" class="block font-medium text-gray-700">Password</label>
+          <input type="password" id="password" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition transform focus:scale-105"/>
+        </div>
+
+        <div>
+          <label for="confirm_password" class="block font-medium text-gray-700">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition transform focus:scale-105"/>
+        </div>
+
+        <div>
+          <label for="phone_no" class="block font-medium text-gray-700">Phone No</label>
+          <input type="text" id="phone_no" name="phone_no" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition transform focus:scale-105"/>
+        </div>
+
+        <div>
+          <label for="address" class="block font-medium text-gray-700">Address</label>
+          <input type="text" id="address" name="address" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition transform focus:scale-105"/>
+        </div>
+
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-transform transform hover:scale-105 hover:shadow-lg">
+          Register
+        </button>
+      </form>
+
+      <p id="message" class="text-center mt-4 font-medium text-red-600"></p>
+    </div>
+  </main>
+
+  <!-- Script -->
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm_password").value;
+
+      if (password !== confirmPassword) {
+        document.getElementById("message").innerText = "Passwords do not match.";
+        return;
+      }
+
+      const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: password,
+        phone_no: document.getElementById("phone_no").value,
+        address: document.getElementById("address").value
+      };
+
+      fetch("http://localhost:8080/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById("message").innerText = data.error;
+        } else {
+          document.getElementById("message").classList.remove("text-red-600");
+          document.getElementById("message").classList.add("text-green-600");
+          document.getElementById("message").innerText = data.message;
+          setTimeout(() => {
+            window.location.href = "userLogin.html?successMessage=" + encodeURIComponent(data.message);
+          }, 1000);
+        }
+      })
+      .catch(error => {
+        document.getElementById("message").innerText = "An error occurred. Please try again.";
+      });
+    });
+  </script>
+
+</body>
+</html>
